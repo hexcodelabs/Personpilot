@@ -1,3 +1,13 @@
+
+import 'package:aiapp/reminders/end.dart';
+import 'package:aiapp/reminders/questionOne.dart';
+import 'package:aiapp/reminders/questionThree.dart';
+import 'package:aiapp/reminders/questionTwo.dart';
+import 'package:aiapp/reminders/reminderDone.dart';
+import 'package:aiapp/reminders/suggession.dart';
+import 'package:aiapp/stateOfMind/done.dart';
+import 'package:aiapp/stateOfMind/emotions.dart';
+
 import 'package:flutter/material.dart';
 import 'package:aiapp/stateOfMind/rating.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +24,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<StateOfMind>(create: (_) => StateOfMind()),
+        ChangeNotifierProvider(
+          builder: (context) => StateOfMind(),
+        ),
       ],
       child: MaterialApp(
         title: 'AI App',
         debugShowCheckedModeBanner: false,
-        home: RatingPage(),
+        home: EndPage(),
       ),
     );
   }
