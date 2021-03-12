@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 
 
-class QuestionTwo extends StatelessWidget {
+class Done extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -36,24 +36,24 @@ class QuestionTwo extends StatelessWidget {
                     height: 50,
                   ),
                   Text(
-                    "Great! Would you like me to give",
+                    "Great, Malthe!",
                     style: AppTheme.msgText,
                   ),
+                  SizedBox(height: 20,),
                   Text(
-                    "you reminders during your work day",
+                    "Your reminer has been deployed.",
                     style: AppTheme.msgText,
                   ),
+                  SizedBox(height: 20,),
                   Text(
-                    "to make sure you get enough fluids?",
+                    "I'll be in touch.",
                     style: AppTheme.msgText,
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                  SizedBox(height: 20,),
                   AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Image.asset(
-                      'assets/images/questionTwo.png',
+                      'assets/images/questionThree.png',
                       width: 50.0,
                       height: 50.0,
 //                      fit: BoxFit.contain,
@@ -66,21 +66,6 @@ class QuestionTwo extends StatelessWidget {
                       MaterialButton(
                         minWidth: 150,
                         height: 50,
-                        onPressed: () => {
-
-                        },
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side:
-                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
-                        child: Text(
-                          "Probably not",
-                          style: AppTheme.btnText1,
-                        ),
-                      ),
-                      MaterialButton(
-                        minWidth: 150,
-                        height: 50,
                         onPressed: () => {},
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -88,7 +73,7 @@ class QuestionTwo extends StatelessWidget {
                             BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         color: Color(0xFF03BFB5),
                         child: Text(
-                          "Yes, awesome",
+                          "Cool",
                           style: AppTheme.btnText2,
                         ),
                       )

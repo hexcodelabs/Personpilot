@@ -6,11 +6,15 @@ class AppTheme {
       color: Color(0xFF03BFB5),
       fontSize: 20,
       fontWeight: FontWeight.bold,);
+  static TextStyle headingTextWhite = const TextStyle(
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,);
 
   static TextStyle msgText = const TextStyle(
     color: Colors.black87,
     fontSize: 20,
-    fontWeight: FontWeight.normal,);
+    fontWeight: FontWeight.w400,);
 
   static LinearGradient ratingGradient = LinearGradient(
     colors: [
@@ -36,5 +40,17 @@ class AppTheme {
     color: Colors.black,
     fontSize: 15,
     fontWeight: FontWeight.normal,);
+  static TextStyle boldText = const TextStyle(
+    color: Colors.black87,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,);
+  static TextStyle reminderText = const TextStyle(
+    color: Colors.black87,
+    fontSize: 18,
+    fontWeight: FontWeight.normal,);
+  static TextStyle reminderTextTitle = const TextStyle(
+    color: Colors.black87,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,);
 
 }

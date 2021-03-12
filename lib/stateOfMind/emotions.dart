@@ -5,6 +5,7 @@ import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
+import 'package:aiapp/Me/overview.dart';
 
 
 class EmotionsPage extends StatelessWidget {
@@ -153,7 +154,10 @@ class EmotionsPage extends StatelessWidget {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
-
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DonePage()))
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -188,16 +192,24 @@ class EmotionsPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: Center(
-                      child: Container(
-                        child: Column(
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.user,
-                              color: Colors.black,
-                              size: 20.0,
-                            ),
-                            Text("Me")
-                          ],
+                      child: GestureDetector(
+                        onTap: ()=>{
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Overview()))
+                        },
+                        child: Container(
+                          child: Column(
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.user,
+                                color: Colors.black,
+                                size: 20.0,
+                              ),
+                              Text("Me")
+                            ],
+                          ),
                         ),
                       ),
                     ),

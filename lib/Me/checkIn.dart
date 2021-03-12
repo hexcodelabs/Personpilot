@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:aiapp/providers/stateOfMind.dart';
-import 'package:aiapp/stateOfMind/reasons.dart';
-import 'package:aiapp/Me/overview.dart';
+import 'package:aiapp/providers/me.dart';
+import 'package:aiapp/me/reason.dart';
 
-class RatingPage extends StatefulWidget {
+class CheckIn extends StatefulWidget {
   @override
-  _RatingPageState createState() => _RatingPageState();
+  _CheckInState createState() => _CheckInState();
 }
 
-class _RatingPageState extends State<RatingPage> {
+class _CheckInState extends State<CheckIn> {
   double _valueRating = 3;
+  String _feel = "Good";
+  IconData _ratingIcon = FontAwesomeIcons.smile;
   @override
   Widget build(BuildContext context) {
-    var stateOfMind = Provider.of<StateOfMind>(context);
+    var me = Provider.of<Me>(context);
     String name = "Tharaka";
     String time = "afternoon";
 
@@ -70,10 +71,10 @@ class _RatingPageState extends State<RatingPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                   child: FaIcon(
-                                stateOfMind.getRatingIcon,
-                                color: Colors.white,
-                                size: 100.0,
-                              )),
+                                    _ratingIcon,
+                                    color: Colors.white,
+                                    size: 100.0,
+                                  )),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -81,10 +82,10 @@ class _RatingPageState extends State<RatingPage> {
                                 height: 30,
                                 width: 150,
                                 decoration:
-                                    BoxDecoration(color: Color(0xFF03BFB5)),
+                                BoxDecoration(color: Color(0xFF03BFB5)),
                                 child: Center(
                                   child: Text(
-                                    stateOfMind.getFeel,
+                                    _feel,
                                     style: TextStyle(
                                         fontSize: 20,
                                         color: Colors.white,
@@ -106,35 +107,34 @@ class _RatingPageState extends State<RatingPage> {
                                     setState(() {
                                       _valueRating = value;
                                     });
-                                    stateOfMind.setRatingValue = value;
-                                    if (stateOfMind.getRatingValue >= 1.0 &&
-                                        stateOfMind.getRatingValue < 2.0) {
-                                      stateOfMind.setRatingIcon =
+                                    if (_valueRating >= 1.0 &&
+                                        _valueRating < 2.0) {
+                                      _ratingIcon =
                                           FontAwesomeIcons.angry;
-                                      stateOfMind.setFeel = "Terrible";
+                                      _feel = "Terrible";
                                     }
-                                    if (stateOfMind.getRatingValue >= 2.0 &&
-                                        stateOfMind.getRatingValue < 3.0) {
-                                      stateOfMind.setRatingIcon =
+                                    if (_valueRating >= 2.0 &&
+                                        _valueRating < 3.0) {
+                                      _ratingIcon =
                                           FontAwesomeIcons.meh;
-                                      stateOfMind.setFeel = "Bad";
+                                      _feel = "Bad";
                                     }
-                                    if (stateOfMind.getRatingValue >= 3.0 &&
-                                        stateOfMind.getRatingValue < 4.0) {
-                                      stateOfMind.setRatingIcon =
+                                    if (_valueRating >= 3.0 &&
+                                        _valueRating < 4.0) {
+                                      _ratingIcon =
                                           FontAwesomeIcons.smile;
-                                      stateOfMind.setFeel = "Okay";
+                                      _feel = "Okay";
                                     }
-                                    if (stateOfMind.getRatingValue >= 4.0 &&
-                                        stateOfMind.getRatingValue < 5.0) {
-                                      stateOfMind.setRatingIcon =
+                                    if (_valueRating >= 4.0 &&
+                                        _valueRating < 5.0) {
+                                      _ratingIcon =
                                           FontAwesomeIcons.grinAlt;
-                                      stateOfMind.setFeel = "Good";
+                                      _feel = "Good";
                                     }
-                                    if (stateOfMind.getRatingValue == 5.0) {
-                                      stateOfMind.setRatingIcon =
+                                    if (_valueRating == 5.0) {
+                                      _ratingIcon =
                                           FontAwesomeIcons.laughBeam;
-                                      stateOfMind.setFeel = "Great";
+                                      _feel = "Great";
                                     }
                                   },
                                 ),
@@ -154,14 +154,14 @@ class _RatingPageState extends State<RatingPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ReasonsPage()))
+                                  builder: (context) => MeReasonsPage()))
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
-                                BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         child: Text(
-                          "Skip",
+                          "Cancel",
                           style: AppTheme.btnText1,
                         ),
                       ),
@@ -169,15 +169,18 @@ class _RatingPageState extends State<RatingPage> {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
+                          me.setFeel = _feel,
+                          me.setRatingIcon = _ratingIcon,
+                          me.setRatingValue = _valueRating,
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ReasonsPage()))
+                                  builder: (context) => MeReasonsPage()))
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
-                                BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         color: Color(0xFF03BFB5),
                         child: Text(
                           "Continue",
@@ -189,24 +192,18 @@ class _RatingPageState extends State<RatingPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: Center(
-                      child: GestureDetector(
-                        onTap: ()=>{
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Overview()))
-                        },
-                        child: Container(
-                          child: Column(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.user,
-                                color: Colors.black,
-                                size: 20.0,
-                              ),
-                              Text("Me")
-                            ],
-                          ),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Colors.black,
+                              size: 20.0,
+                            ),
+                            Text("Me", style: TextStyle(
+                              color: Color(0xFF03BFB5)
+                            ),)
+                          ],
                         ),
                       ),
                     ),

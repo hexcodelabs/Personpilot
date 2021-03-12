@@ -4,31 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:aiapp/providers/stateOfMind.dart';
-import 'package:aiapp/Me/overview.dart';
+import 'package:aiapp/providers/me.dart';
 
 
-class ReasonsPage extends StatelessWidget {
+class MeReasonsPage extends StatefulWidget {
+  @override
+  _MeReasonsPageState createState() => _MeReasonsPageState();
+}
+
+class _MeReasonsPageState extends State<MeReasonsPage> {
+
+
   Widget button(String text, int key, BuildContext context) {
-    StateOfMind stateOfMind = Provider.of<StateOfMind>(context);
+    Me me = Provider.of<Me>(context);
     return FlatButton(
       minWidth: 100,
       height: 50,
       onPressed: () => {
-        stateOfMind.setReasonIsSelected = [
+        me.setReasonIsSelected = [
           key,
-          !stateOfMind.getReasonsIsSelected[key]
+          !me.getReasonsIsSelected[key]
         ]
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
           side: BorderSide(color: Color(0xFF03BFB5), width: 2)),
-      color: stateOfMind.getReasonsIsSelected[key]
+      color: me.getReasonsIsSelected[key]
           ? Color(0xFF03BFB5)
           : Colors.white,
       child: Text(
         text,
-        style: stateOfMind.getReasonsIsSelected[key]
+        style: me.getReasonsIsSelected[key]
             ? AppTheme.btnReasonTxt1
             : AppTheme.btnReasonTxt2,
       ),
@@ -100,7 +106,7 @@ class ReasonsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StateOfMind stateOfMind = Provider.of<StateOfMind>(context);
+    Me me = Provider.of<Me>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -141,7 +147,7 @@ class ReasonsPage extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  reasonButtons(stateOfMind.getReasons, context),
+                  reasonButtons(me.getReasons, context),
                   Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -150,15 +156,12 @@ class ReasonsPage extends StatelessWidget {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EmotionsPage()))
+                          me.setReasonsToDefault = 0
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
-                                BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         child: Text(
                           "Skip",
                           style: AppTheme.btnText1,
@@ -176,7 +179,7 @@ class ReasonsPage extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
-                                BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         color: Color(0xFF03BFB5),
                         child: Text(
                           "Continue",
@@ -188,24 +191,16 @@ class ReasonsPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                     child: Center(
-                      child: GestureDetector(
-                        onTap: ()=>{
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Overview()))
-                        },
-                        child: Container(
-                          child: Column(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.user,
-                                color: Colors.black,
-                                size: 20.0,
-                              ),
-                              Text("Me")
-                            ],
-                          ),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Colors.black,
+                              size: 20.0,
+                            ),
+                            Text("Me")
+                          ],
                         ),
                       ),
                     ),

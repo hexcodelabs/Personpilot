@@ -4,6 +4,7 @@ import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
+import 'package:aiapp/remindersFlow1/questionTwo.dart';
 
 
 class QuestionOne extends StatelessWidget {
@@ -77,7 +78,12 @@ class QuestionOne extends StatelessWidget {
                       MaterialButton(
                         minWidth: 150,
                         height: 50,
-                        onPressed: () => {},
+                        onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuestionTwo()))
+                        },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:

@@ -1,10 +1,17 @@
 
-import 'package:aiapp/reminders/end.dart';
-import 'package:aiapp/reminders/questionOne.dart';
-import 'package:aiapp/reminders/questionThree.dart';
-import 'package:aiapp/reminders/questionTwo.dart';
-import 'package:aiapp/reminders/reminderDone.dart';
-import 'package:aiapp/reminders/suggession.dart';
+import 'file:///C:/Other%20Activities/GitHub/AIapp/lib/introduction/welcome.dart';
+import 'package:aiapp/Me/latestCheckIn.dart';
+import 'package:aiapp/Me/overview.dart';
+import 'package:aiapp/introduction/quote.dart';
+import 'package:aiapp/providers/me.dart';
+import 'package:aiapp/providers/registration.dart';
+import 'package:aiapp/registration/regPageOne.dart';
+import 'package:aiapp/registration/regPageThree.dart';
+import 'package:aiapp/registration/regPageTwo.dart';
+import 'package:aiapp/remindersFlow1/end.dart';
+import 'package:aiapp/remindersFlow2/done.dart';
+import 'package:aiapp/remindersFlow2/library.dart';
+import 'package:aiapp/remindersFlow2/questionOne.dart';
 import 'package:aiapp/stateOfMind/done.dart';
 import 'package:aiapp/stateOfMind/emotions.dart';
 
@@ -27,11 +34,17 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           builder: (context) => StateOfMind(),
         ),
+        ChangeNotifierProvider(
+          builder: (context) => Registration(),
+        ),
+        ChangeNotifierProvider(
+          builder: (context) => Me(),
+        ),
       ],
       child: MaterialApp(
         title: 'AI App',
         debugShowCheckedModeBanner: false,
-        home: EndPage(),
+        home: RatingPage(),
       ),
     );
   }

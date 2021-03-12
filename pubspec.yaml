@@ -25,6 +25,9 @@ dependencies:
     sdk: flutter
   font_awesome_flutter: ^8.11.0
   provider: ^3.2.0
+  flutter_svg: ^0.19.0
+  dotted_border: ^1.0.7
+  page_transition: ^1.1.7+6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -50,6 +53,7 @@ flutter:
     - assets/images/questionOne.png
     - assets/images/questionTwo.png
     - assets/images/questionThree.png
+    - assets/images/quotation.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -62,6 +66,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Catamaran
+      fonts:
+        - asset: assets/fonts/Catamaran/Catamaran-Regular.ttf
+
   # fonts:
   #   - family: Schyler
   #     fonts:

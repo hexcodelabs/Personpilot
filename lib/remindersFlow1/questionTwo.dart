@@ -4,14 +4,13 @@ import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
+import 'package:aiapp/remindersFlow1/questionThree.dart';
 
 
-class SuggestionPage extends StatelessWidget {
+class QuestionTwo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String text = "Not getting enough fluids can cause \nheadaches, loss of focus, loss of \n"
-        "energy, crankiness, dull skin etc.";
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFEFF5F9),
@@ -38,19 +37,28 @@ class SuggestionPage extends StatelessWidget {
                     height: 50,
                   ),
                   Text(
-                    "Hi Malthe!",
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 25,
-                      fontWeight: FontWeight.normal,
-                    ),
+                    "Great! Would you like me to give",
+                    style: AppTheme.msgText,
+                  ),
+                  Text(
+                    "you reminders during your work day",
+                    style: AppTheme.msgText,
+                  ),
+                  Text(
+                    "to make sure you get enough fluids?",
+                    style: AppTheme.msgText,
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    text,
-                    style: AppTheme.msgText,
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Image.asset(
+                      'assets/images/questionTwo.png',
+                      width: 50.0,
+                      height: 50.0,
+//                      fit: BoxFit.contain,
+                    ),
                   ),
                   Spacer(),
                   Row(
@@ -59,14 +67,34 @@ class SuggestionPage extends StatelessWidget {
                       MaterialButton(
                         minWidth: 150,
                         height: 50,
-                        onPressed: () => {},
+                        onPressed: () => {
+
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side:
+                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                        child: Text(
+                          "Probably not",
+                          style: AppTheme.btnText1,
+                        ),
+                      ),
+                      MaterialButton(
+                        minWidth: 150,
+                        height: 50,
+                        onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => QuestionThree()))
+                        },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
                             BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         color: Color(0xFF03BFB5),
                         child: Text(
-                          "Interesting",
+                          "Yes, awesome",
                           style: AppTheme.btnText2,
                         ),
                       )
