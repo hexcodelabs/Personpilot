@@ -1,17 +1,20 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:aiapp/introduction/quote.dart';
 import 'package:provider/provider.dart';
-import 'package:aiapp/providers/stateOfMind.dart';
+import 'package:aiapp/providers/registration.dart';
 
-class IntroductionPage extends StatelessWidget {
+class IntroductionWelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var registration = Provider.of<Registration>(context);
+    String name = registration.getName;
     String text =
         "Let me introduce myself \nproperly. I am Personpilot - your\n new personal co-pilot."
         "\n    \n"
-        "I will help you navigate and \n thrive at work, and i am very \nexited to offer my support."
+        "I will help you navigate and \n thrive at work, and I am very \nexited to offer my support."
         "\n    \n"
         "Remember, you're the pilot of \n your professional life, and I'm\n your devoted co-pilot.";
     return Scaffold(
@@ -54,10 +57,10 @@ class IntroductionPage extends StatelessWidget {
                     height: 50,
                   ),
                   Text(
-                    "Welcome Malthe!",
+                    "Welcome, $name!",
                     style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 22,
+                      color: Colors.black.withOpacity(0.75),
+                      fontSize: 21,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -66,7 +69,10 @@ class IntroductionPage extends StatelessWidget {
                   ),
                   Text(
                     text,
-                    style: AppTheme.msgText,
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.75),
+                      fontSize: 19,
+                      fontWeight: FontWeight.w400,),
                     textAlign: TextAlign.center,
                   ),
                   Spacer(),
@@ -76,7 +82,16 @@ class IntroductionPage extends StatelessWidget {
                       MaterialButton(
                         minWidth: 200,
                         height: 50,
-                        onPressed: () => {},
+                        onPressed: () => {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: IntroductionQuotePage(),
+                            ),
+                                  (route)=>false
+                          )
+                        },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:

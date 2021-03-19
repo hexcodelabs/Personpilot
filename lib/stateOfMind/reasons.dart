@@ -6,96 +6,80 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 import 'package:aiapp/Me/overview.dart';
+import 'package:page_transition/page_transition.dart';
 
+class ReasonsPage extends StatefulWidget {
+  @override
+  _ReasonsPageState createState() => _ReasonsPageState();
+}
 
-class ReasonsPage extends StatelessWidget {
+class _ReasonsPageState extends State<ReasonsPage> {
+
+  List<bool> isReasonSelected;
+
+  @override
+  void initState() {
+    var stateOfMind = Provider.of<StateOfMind>(context, listen: false);
+    setState(() {
+      isReasonSelected = List.from(stateOfMind.getReasonsIsSelected);
+    });
+    super.initState();
+  }
+
   Widget button(String text, int key, BuildContext context) {
-    StateOfMind stateOfMind = Provider.of<StateOfMind>(context);
+
     return FlatButton(
-      minWidth: 100,
       height: 50,
       onPressed: () => {
-        stateOfMind.setReasonIsSelected = [
-          key,
-          !stateOfMind.getReasonsIsSelected[key]
-        ]
+        if(isReasonSelected.where((element) => element==true).toList().length<5){
+          setState((){
+            isReasonSelected[key] = !isReasonSelected[key];
+          })
+        }else{
+          if(isReasonSelected[key]==true){
+            setState((){
+              isReasonSelected[key] = !isReasonSelected[key];
+            })
+          }
+        }
+
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
           side: BorderSide(color: Color(0xFF03BFB5), width: 2)),
-      color: stateOfMind.getReasonsIsSelected[key]
+      color: isReasonSelected[key]
           ? Color(0xFF03BFB5)
           : Colors.white,
       child: Text(
         text,
-        style: stateOfMind.getReasonsIsSelected[key]
+        style: isReasonSelected[key]
             ? AppTheme.btnReasonTxt1
             : AppTheme.btnReasonTxt2,
       ),
     );
   }
 
+  Widget buttonRow(List<String> reasons, BuildContext context, int index) {
+    return (Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          button(reasons[index], index, context),
+          button(reasons[index + 1], index + 1, context),
+//          button(reasons[index + 2], index + 2, context)
+        ],
+      ),
+    ));
+  }
+
   Widget reasonButtons(List<String> reasons, BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[0], 0, context),
-              button(reasons[1], 1, context),
-              button(reasons[2], 2, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[3], 3, context),
-              button(reasons[4], 4, context),
-              button(reasons[5], 5, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[6], 6, context),
-              button(reasons[7], 7, context),
-              button(reasons[8], 8, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[9], 9, context),
-              button(reasons[10], 10, context),
-              button(reasons[11], 11, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[12], 12, context),
-              button(reasons[13], 13, context),
-              button(reasons[14], 14, context)
-            ],
-          ),
-        ),
-      ],
-    );
+    return (ListView.builder(
+        padding: const EdgeInsets.all(0),
+        itemCount: (reasons.length ~/ 2).toInt(),
+        itemBuilder: (BuildContext context, int index) {
+          return buttonRow(reasons, context, index * 2);
+        }));
   }
 
   @override
@@ -104,7 +88,7 @@ class ReasonsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle:true,
+        centerTitle: true,
         backgroundColor: Color(0xFFEFF5F9),
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
@@ -120,7 +104,7 @@ class ReasonsPage extends StatelessWidget {
         child: Center(
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -135,13 +119,15 @@ class ReasonsPage extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Choose upto five reasons.",
+                    "Choose up to five reasons.",
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  reasonButtons(stateOfMind.getReasons, context),
+                  Container(
+                      height: MediaQuery.of(context).size.height*0.46,
+                      child: reasonButtons(stateOfMind.getReasons, context)),
                   Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -151,9 +137,12 @@ class ReasonsPage extends StatelessWidget {
                         height: 50,
                         onPressed: () => {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EmotionsPage()))
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: EmotionsPage(),
+                            ),
+                          )
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -168,10 +157,14 @@ class ReasonsPage extends StatelessWidget {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
+                          stateOfMind.setReasonIsSelected = isReasonSelected,
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EmotionsPage()))
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: EmotionsPage(),
+                            ),
+                          )
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -186,25 +179,30 @@ class ReasonsPage extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     child: Center(
                       child: GestureDetector(
-                        onTap: ()=>{
+                        onTap: () => {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Overview()))
                         },
                         child: Container(
-                          child: Column(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.user,
-                                color: Colors.black,
-                                size: 20.0,
-                              ),
-                              Text("Me")
-                            ],
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Column(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.user,
+                                  color: Colors.black,
+                                  size: 20.0,
+                                ),
+                                Text("Me")
+                              ],
+                            ),
                           ),
                         ),
                       ),

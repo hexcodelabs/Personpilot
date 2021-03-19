@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/registration.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:aiapp/registration/regPageThree.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class RegPageTwo extends StatelessWidget {
 
@@ -12,6 +15,18 @@ class RegPageTwo extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF03BFB5),
+        leading: Center(
+          child: GestureDetector(
+            onTap: ()=>{
+              Navigator.pop(context)
+            },
+            child: FaIcon(
+              FontAwesomeIcons.arrowLeft,
+              color: Colors.black,
+              size: 25.0,
+            ),
+          ),
+        ),
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
         ),
@@ -40,7 +55,7 @@ class RegPageTwo extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w400,
                         )),
                     SizedBox(
                       height: 20,
@@ -53,7 +68,7 @@ class RegPageTwo extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w400,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -74,7 +89,7 @@ class RegPageTwo extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -85,7 +100,7 @@ class RegPageTwo extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
-                          fontWeight: FontWeight.normal,
+                          fontWeight: FontWeight.w400,
                         )),
                     SizedBox(
                       height: 20,
@@ -159,7 +174,15 @@ class RegPageTwo extends StatelessWidget {
                           MaterialButton(
                             minWidth: MediaQuery.of(context).size.width * 0.85,
                             height: 50,
-                            onPressed: () => {},
+                            onPressed: () => {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: RegPageThree(),
+                                ),
+                              )
+                            },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 side: BorderSide(color: Colors.white, width: 2)),
@@ -169,7 +192,7 @@ class RegPageTwo extends StatelessWidget {
                               style: TextStyle(
                                 color: Color(0xFF03BFB5),
                                 fontSize: 18,
-                                fontWeight: FontWeight.normal,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           )

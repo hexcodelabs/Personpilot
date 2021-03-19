@@ -6,96 +6,81 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 import 'package:aiapp/Me/overview.dart';
+import 'package:page_transition/page_transition.dart';
+
+class EmotionsPage extends StatefulWidget {
+  @override
+  _EmotionsPageState createState() => _EmotionsPageState();
+}
+
+class _EmotionsPageState extends State<EmotionsPage> {
+
+  List<bool> isEmotionSelected;
+
+  @override
+  void initState() {
+    var stateOfMind = Provider.of<StateOfMind>(context, listen: false);
+    setState(() {
+      isEmotionSelected = List.from(stateOfMind.getEmotionsIsSelected);
+    });
+
+    super.initState();
+  }
 
 
-class EmotionsPage extends StatelessWidget {
   Widget button(String text, int key, BuildContext context) {
-    StateOfMind stateOfMind = Provider.of<StateOfMind>(context);
     return FlatButton(
       minWidth: 100,
       height: 50,
       onPressed: () => {
-        stateOfMind.setEmotionIsSelected = [
-          key,
-          !stateOfMind.getEmotionsIsSelected[key]
-        ]
+        if(isEmotionSelected.where((element) => element==true).toList().length<5){
+          setState((){
+            isEmotionSelected[key]= !isEmotionSelected[key];
+          })
+        }else{
+          if(isEmotionSelected[key]==true){
+            setState((){
+              isEmotionSelected[key]= !isEmotionSelected[key];
+            })
+          }
+        }
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
           side: BorderSide(color: Color(0xFFFFC10D), width: 2)),
-      color: stateOfMind.getEmotionsIsSelected[key]
+      color: isEmotionSelected[key]
           ? Color(0xFFFFC10D)
           : Colors.white,
       child: Text(
         text,
-        style: stateOfMind.getEmotionsIsSelected[key]
+        style: isEmotionSelected[key]
             ? AppTheme.btnReasonTxt1
             : AppTheme.btnReasonTxt2,
       ),
     );
   }
 
-  Widget emotionButtons(List<String> reasons, BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[0], 0, context),
-              button(reasons[1], 1, context),
-              button(reasons[2], 2, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[3], 3, context),
-              button(reasons[4], 4, context),
-              button(reasons[5], 5, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[6], 6, context),
-              button(reasons[7], 7, context),
-              button(reasons[8], 8, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[9], 9, context),
-              button(reasons[10], 10, context),
-              button(reasons[11], 11, context)
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              button(reasons[12], 12, context),
-              button(reasons[13], 13, context),
-              button(reasons[14], 14, context)
-            ],
-          ),
-        ),
-      ],
-    );
+  Widget buttonRow(List<String> emotions, BuildContext context, int index) {
+    return (Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          button(emotions[index], index, context),
+          button(emotions[index + 1], index + 1, context),
+          button(emotions[index + 2], index + 2, context)
+        ],
+      ),
+    ));
+  }
+
+  Widget emotionButtons(List<String> emotions, BuildContext context) {
+    return (ListView.builder(
+        padding: const EdgeInsets.all(0),
+        itemCount: (emotions.length ~/ 3).toInt(),
+        itemBuilder: (BuildContext context, int index) {
+          return buttonRow(emotions, context, index * 3);
+        }));
   }
 
   @override
@@ -104,7 +89,7 @@ class EmotionsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle:true,
+        centerTitle: true,
         backgroundColor: Color(0xFFEFF5F9),
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
@@ -120,7 +105,7 @@ class EmotionsPage extends StatelessWidget {
         child: Center(
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -139,13 +124,15 @@ class EmotionsPage extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Choose upto five emotions.",
+                    "Choose up to five emotions.",
                     style: TextStyle(fontSize: 15, color: Colors.grey),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  emotionButtons(stateOfMind.getReasons, context),
+                  Container(
+                      height: MediaQuery.of(context).size.height * 0.42,
+                      child: emotionButtons(stateOfMind.getEmotions, context)),
                   Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -154,15 +141,19 @@ class EmotionsPage extends StatelessWidget {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DonePage()))
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: DonePage(),
+                            ),
+                              (route)=>false
+                          )
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
-                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                                BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         child: Text(
                           "Skip",
                           style: AppTheme.btnText1,
@@ -172,15 +163,20 @@ class EmotionsPage extends StatelessWidget {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DonePage()))
+                          stateOfMind.setEmotionIsSelected = isEmotionSelected,
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: DonePage(),
+                            ),
+                                  (route)=>false
+                          )
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
-                            BorderSide(color: Color(0xFF03BFB5), width: 2)),
+                                BorderSide(color: Color(0xFF03BFB5), width: 2)),
                         color: Color(0xFF03BFB5),
                         child: Text(
                           "Continue",
@@ -190,25 +186,30 @@ class EmotionsPage extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                     child: Center(
                       child: GestureDetector(
-                        onTap: ()=>{
+                        onTap: () => {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Overview()))
                         },
                         child: Container(
-                          child: Column(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.user,
-                                color: Colors.black,
-                                size: 20.0,
-                              ),
-                              Text("Me")
-                            ],
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                            child: Column(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.user,
+                                  color: Colors.black,
+                                  size: 20.0,
+                                ),
+                                Text("Me")
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 import 'package:aiapp/stateOfMind/reasons.dart';
 import 'package:aiapp/Me/overview.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:aiapp/providers/registration.dart';
 
 class RatingPage extends StatefulWidget {
   @override
@@ -12,11 +14,11 @@ class RatingPage extends StatefulWidget {
 }
 
 class _RatingPageState extends State<RatingPage> {
-  double _valueRating = 3;
   @override
   Widget build(BuildContext context) {
     var stateOfMind = Provider.of<StateOfMind>(context);
-    String name = "Tharaka";
+    var registration = Provider.of<Registration>(context);
+    String name = registration.getName;
     String time = "afternoon";
 
     return Scaffold(
@@ -37,7 +39,7 @@ class _RatingPageState extends State<RatingPage> {
         child: Center(
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -99,13 +101,10 @@ class _RatingPageState extends State<RatingPage> {
                                 child: Slider(
                                   min: 1,
                                   max: 5,
-                                  value: _valueRating,
+                                  value: stateOfMind.getRatingValue,
                                   activeColor: Colors.white,
                                   inactiveColor: Colors.grey,
                                   onChanged: (double value) {
-                                    setState(() {
-                                      _valueRating = value;
-                                    });
                                     stateOfMind.setRatingValue = value;
                                     if (stateOfMind.getRatingValue >= 1.0 &&
                                         stateOfMind.getRatingValue < 2.0) {
@@ -151,10 +150,14 @@ class _RatingPageState extends State<RatingPage> {
                         minWidth: 150,
                         height: 50,
                         onPressed: () => {
+                          stateOfMind.setFeelToDefault = 0,
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ReasonsPage()))
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ReasonsPage(),
+                            ),
+                          )
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -170,9 +173,12 @@ class _RatingPageState extends State<RatingPage> {
                         height: 50,
                         onPressed: () => {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ReasonsPage()))
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: ReasonsPage(),
+                            ),
+                          )
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -187,7 +193,7 @@ class _RatingPageState extends State<RatingPage> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0,20,0,0),
                     child: Center(
                       child: GestureDetector(
                         onTap: ()=>{
@@ -197,15 +203,20 @@ class _RatingPageState extends State<RatingPage> {
                                   builder: (context) => Overview()))
                         },
                         child: Container(
-                          child: Column(
-                            children: [
-                              FaIcon(
-                                FontAwesomeIcons.user,
-                                color: Colors.black,
-                                size: 20.0,
-                              ),
-                              Text("Me")
-                            ],
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                            child: Column(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.user,
+                                  color: Colors.black,
+                                  size: 20.0,
+                                ),
+                                Text("Me")
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -1,9 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:aiapp/providers/stateOfMind.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:aiapp/registration/regPageTwo.dart';
 
 
 class RegPageOne extends StatelessWidget {
@@ -40,7 +39,7 @@ class RegPageOne extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,
-                      fontWeight: FontWeight.normal,)
+                      fontWeight: FontWeight.w400,)
                   ),
                   SizedBox(
                     height: 10,
@@ -50,7 +49,7 @@ class RegPageOne extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 25,
-                        fontWeight: FontWeight.normal,)
+                        fontWeight: FontWeight.w400,)
                   ),
                   SizedBox(
                     height: 10,
@@ -60,7 +59,7 @@ class RegPageOne extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,
-                      fontWeight: FontWeight.normal,),
+                      fontWeight: FontWeight.w400),
                   ),
                   SizedBox(
                     height: 25,
@@ -81,7 +80,15 @@ class RegPageOne extends StatelessWidget {
                         MaterialButton(
                           minWidth: 200,
                           height: 50,
-                          onPressed: () => {},
+                          onPressed: () => {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: RegPageTwo(),
+                              ),
+                            )
+                          },
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               side:

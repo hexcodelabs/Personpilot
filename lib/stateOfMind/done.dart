@@ -2,14 +2,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:aiapp/Me/overview.dart';
+import 'package:aiapp/providers/registration.dart';
 import 'package:provider/provider.dart';
-import 'package:aiapp/providers/stateOfMind.dart';
 
 
 class DonePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
+    var registration = Provider.of<Registration>(context);
+    String name = registration.getName;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFEFF5F9),
@@ -28,23 +30,35 @@ class DonePage extends StatelessWidget {
         child: Center(
           child: Container(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+              padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 130,
+                    height: 50,
                   ),
                   Text(
-                    "Thanks for checking in, Malthe!",
+                    "Thanks for checking in, $name!",
+                    style: AppTheme.msgText,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "I'll be in touch.",
                     style: AppTheme.msgText,
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                  Text(
-                    "I'll be in touch.",
-                    style: AppTheme.msgText,
+                  AspectRatio(
+                    aspectRatio: 16 / 8,
+                    child: Image.asset(
+                      'assets/images/done.gif',
+                      width: 50.0,
+                      height: 50.0,
+//                      fit: BoxFit.contain,
+                    ),
                   ),
                   Spacer(),
                   Row(
@@ -53,7 +67,12 @@ class DonePage extends StatelessWidget {
                       MaterialButton(
                         minWidth: 150,
                         height: 50,
-                        onPressed: () => {},
+                        onPressed: () => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Overview()))
+                        },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:
@@ -67,18 +86,31 @@ class DonePage extends StatelessWidget {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0,20,0,0),
                     child: Center(
-                      child: Container(
-                        child: Column(
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.user,
-                              color: Colors.black,
-                              size: 20.0,
+                      child: GestureDetector(
+                        onTap: ()=>{
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Overview()))
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          width: MediaQuery.of(context).size.width,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                            child: Column(
+                              children: [
+                                FaIcon(
+                                  FontAwesomeIcons.user,
+                                  color: Colors.black,
+                                  size: 20.0,
+                                ),
+                                Text("Me")
+                              ],
                             ),
-                            Text("Me")
-                          ],
+                          ),
                         ),
                       ),
                     ),

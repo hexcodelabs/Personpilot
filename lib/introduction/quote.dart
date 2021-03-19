@@ -1,16 +1,16 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:aiapp/providers/stateOfMind.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:aiapp/stateOfMind/rating.dart';
 
-class QuotePage extends StatelessWidget {
+class IntroductionQuotePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String text =
         "When people go to work, they \n shouldn't have to leave their \n hearts at home.";
+    String author = "Betty Bender";
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF018076),
@@ -74,7 +74,7 @@ class QuotePage extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text("Betty Bender", style: TextStyle(fontStyle: FontStyle.italic,color: Colors.white,),),
+                  Text(author, style: TextStyle(fontStyle: FontStyle.italic,color: Colors.white,),),
                   Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -82,7 +82,16 @@ class QuotePage extends StatelessWidget {
                       MaterialButton(
                         minWidth: 200,
                         height: 50,
-                        onPressed: () => {},
+                        onPressed: () => {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: RatingPage(),
+                            ),
+                                  (route)=>false
+                          )
+                        },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             side:

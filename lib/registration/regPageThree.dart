@@ -4,6 +4,8 @@ import 'package:aiapp/themes/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/registration.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:aiapp/introduction/welcome.dart';
 
 class RegPageThree extends StatelessWidget {
   @override
@@ -11,6 +13,18 @@ class RegPageThree extends StatelessWidget {
     var registration = Provider.of<Registration>(context);
     return Scaffold(
       appBar: AppBar(
+        leading: Center(
+          child: GestureDetector(
+            onTap: ()=>{
+              Navigator.pop(context)
+            },
+            child: FaIcon(
+              FontAwesomeIcons.arrowLeft,
+              color: Colors.black,
+              size: 25.0,
+            ),
+          ),
+        ),
         backgroundColor: Color(0xFF03BFB5),
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
@@ -41,7 +55,7 @@ class RegPageThree extends StatelessWidget {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -92,12 +106,12 @@ class RegPageThree extends StatelessWidget {
                           color: Colors.transparent,
                           shape: BoxShape.circle,
                           border: Border.all(
-                              color: Colors.black, width: 2.0)),
+                              color: Colors.white, width: 1.0)),
                       child: Center(
                         child: Container(
                             child: FaIcon(
                               FontAwesomeIcons.plus,
-                              color: Colors.black,
+                              color: Colors.white,
                               size: 30.0,
                             )),
                       ),
@@ -111,9 +125,9 @@ class RegPageThree extends StatelessWidget {
                   Text(
                     "Tap here to add profile picture",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 15,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.w400,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -131,7 +145,19 @@ class RegPageThree extends StatelessWidget {
                           onPressed: registration.getName == null ||
                                   registration.getName == ''
                               ? null
-                              : () => {},
+                              : () => {
+//                            Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName)),
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: IntroductionWelcomePage(),
+                              ),
+                                (route)=>false
+                            ),
+
+
+                          },
                           disabledColor: Colors.black.withOpacity(0.2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
@@ -144,7 +170,7 @@ class RegPageThree extends StatelessWidget {
                                   registration.getName == ''
                                   ?Colors.black.withOpacity(0.4): Color(0xFF03BFB5),
                               fontSize: 18,
-                              fontWeight: FontWeight.normal,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         )

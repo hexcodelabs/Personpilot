@@ -5,42 +5,79 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class StateOfMind with ChangeNotifier {
   double _value = 3;
   IconData _ratingIcon = FontAwesomeIcons.smile;
-  String _feel = "Good";
-  List<bool> _isReasonSelected = List.filled(15, false);
-  List<bool> _isEmotionSelected = List.filled(15, false);
+  String _feel = "Okay";
+  List<bool> _isReasonSelected = List.filled(16, false);
+  List<bool> _isEmotionSelected = List.filled(50, false);
   List<String> _reasons = [
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason",
-    "Reason"
+    "Appreciation/Recognition",
+    "Colleagues",
+    "Energy level",
+    "Flexibility",
+    "Personal development",
+    "Job content",
+    "Motivation",
+    "Manager relationship",
+    "Private life",
+    "Health",
+    "Work-life balance",
+    "Company culture",
+    "Company mission",
+    "Company communications",
+    "Company policies",
+    "Work load"
   ];
   List<String> _emotions = [
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion",
-    "Emotion"
+    "Tired",
+    "Content",
+    "Humurous",
+    "Satisfied",
+    "Worried",
+    "Exhausted",
+    "Unhappy",
+    "Disappointed",
+    "Guilty",
+    "Upbeat",
+    "Frustrated",
+    "Anxious",
+    "Engaged",
+    "Resentful",
+    "Lonely",
+    "Bored",
+    "Insecure",
+    "Secure",
+    "Noticed",
+    "Unnoticed",
+    "Annoyed",
+    "Stressed",
+    "Demoralized",
+    "Passionate",
+    "Ecstatic",
+    "Sad",
+    "Depressed",
+    "Self-conscious",
+    "Panicked",
+    "Afraid",
+    "Angry",
+    "Ashamed",
+    "Jealous",
+    "Disguted",
+    "Embarrassed",
+    "Appreciated",
+    "Unappreciated",
+    "Inspired",
+    "Uninspired",
+    "Happy",
+    "Grateful",
+    "Proud",
+    "Eager",
+    "Relieved",
+    "Motivated",
+    "Reassured",
+    "Loved",
+    "Calm",
+    "Mindful",
+    "Relaxed"
+
   ];
 
 
@@ -66,14 +103,26 @@ class StateOfMind with ChangeNotifier {
     _feel = feel;
     notifyListeners();
   }
-  set setReasonIsSelected(List<dynamic> values) {
-    print(values);
-    _isReasonSelected[values[0]] = values[1]; // value[0] ==> position  value[1] ==> value
+  set setReasonIsSelected(List<bool> values) {
+    _isReasonSelected = values;
     notifyListeners();
   }
-  set setEmotionIsSelected(List<dynamic> values) {
-    print(values);
-    _isEmotionSelected[values[0]] = values[1]; // value[0] ==> position  value[1] ==> value
+  set setEmotionIsSelected(List<bool> values) {
+    _isEmotionSelected = values; // value[0] ==> position  value[1] ==> value
+    notifyListeners();
+  }
+  set setReasonsToDefault(int value){
+    _isReasonSelected = List.filled(15, false);
+    notifyListeners();
+  }
+  set setEmotionsToDefault(int value){
+    _isEmotionSelected = List.filled(15, false);
+    notifyListeners();
+  }
+  set setFeelToDefault(int value){
+    _feel = "Okay";
+    _value = 3;
+    _ratingIcon = FontAwesomeIcons.smile;
     notifyListeners();
   }
 }
