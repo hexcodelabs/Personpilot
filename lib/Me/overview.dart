@@ -32,9 +32,7 @@ class Overview extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: ()=>{
-                      Navigator.pop(context)
-                      },
+                      onTap: () => {Navigator.pop(context)},
                       child: FaIcon(
                         FontAwesomeIcons.arrowLeft,
                         color: Colors.black,
@@ -49,21 +47,19 @@ class Overview extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xFF03BFB5),
-                            shape: BoxShape.circle,
-                          ),
+                              border: Border.all(
+                                  color: Color(0xFF03BFB5), width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50))),
                           child: Center(
-                              child: Text(
-                            "Me",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Color(0xFF03BFB5),
                             ),
-                          )),
+                          ),
                         ),
                         FaIcon(
                           FontAwesomeIcons.ellipsisH,
@@ -88,10 +84,10 @@ class Overview extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: MediaQuery.of(context).size.height*0.02,
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height * 0.55,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -260,27 +256,46 @@ class Overview extends StatelessWidget {
             ),
             Spacer(),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Center(
-                child: Container(
-                  color: Colors.white,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: Column(
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.user,
-                          color: Colors.black,
-                          size: 20.0,
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () => {Navigator.pop(context)},
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Column(
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.square,
+                              color: Colors.black,
+                              size: 20.0,
+                            ),
+                            Text("Co-pilot")
+                          ],
                         ),
-                        Text(
-                          "Me",
-                          style: TextStyle(color: Color(0xFF03BFB5)),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.user,
+                            color: Color(0xFF03BFB5),
+                            size: 20.0,
+                          ),
+                          Text(
+                            "Me",
+                            style: TextStyle(color: Color(0xFF03BFB5)),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )

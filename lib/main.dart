@@ -1,63 +1,59 @@
-
-import 'package:aiapp/Me/latestCheckIn.dart';
-import 'package:aiapp/Me/overview.dart';
-import 'package:aiapp/advice/suggestion.dart';
 import 'package:aiapp/introduction/quote.dart';
 import 'package:aiapp/providers/me.dart';
 import 'package:aiapp/providers/registration.dart';
-import 'package:aiapp/quote/suggestion.dart';
 import 'package:aiapp/registration/regPageOne.dart';
-import 'package:aiapp/registration/regPageThree.dart';
-import 'package:aiapp/registration/regPageTwo.dart';
-import 'package:aiapp/remindersFlow1/end.dart';
-import 'package:aiapp/remindersFlow1/suggession.dart';
-import 'package:aiapp/remindersFlow2/done.dart';
-import 'package:aiapp/remindersFlow2/library.dart';
-import 'package:aiapp/remindersFlow2/questionOne.dart';
-import 'package:aiapp/stateOfMind/done.dart';
-import 'package:aiapp/stateOfMind/emotions.dart';
-import 'package:aiapp/stateOfMind/reasons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 
-void main() {
-  Provider.debugCheckInvalidValueType=null;
-  runApp(MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:aiapp/firebase-functions/auth.dart';
+import 'package:aiapp/introduction/welcome.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FireBaseFunctions fbFunctions = new FireBaseFunctions();
+  Provider.debugCheckInvalidValueType = null;
+  await fbFunctions.isSignedIn().then((value) => {runApp(MyApp(value))});
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final int isSignedIn;
+  MyApp(this.isSignedIn);
   @override
   Widget build(BuildContext context) {
+
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (context) => StateOfMind(),
+          create: (context) => StateOfMind(),
         ),
         ChangeNotifierProvider(
-          builder: (context) => Registration(),
+          create: (context) => Registration(),
         ),
         ChangeNotifierProvider(
-          builder: (context) => MeStateOfMind(),
+          create: (context) => MeStateOfMind(),
         ),
         ChangeNotifierProvider(
-          builder: (context) => MeReminders(),
+          create: (context) => MeReminders(),
         ),
         ChangeNotifierProvider(
-          builder: (context) => MeAdvices(),
+          create: (context) => MeAdvices(),
         ),
         ChangeNotifierProvider(
-          builder: (context) => MeQuotes(),
+          create: (context) => MeQuotes(),
         ),
       ],
       child: MaterialApp(
         title: 'AI App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'OpenSans'),
-        home: RegPageOne(),
-//      home: QuoteSuggestion(),
+        home: isSignedIn == 2
+            ? IntroductionQuotePage()
+            : RegPageOne(),
       ),
     );
   }

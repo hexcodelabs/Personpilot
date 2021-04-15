@@ -31,8 +31,7 @@ class _MeLibraryState extends State<MeLibrary> {
     var meReminders = Provider.of<MeReminders>(context);
     String name = registration.getName;
 
-    List<List<String>> reminders = meReminders.getReminders;
-
+    List<Map<String,dynamic>> reminders = meReminders.getReminders;
     return Scaffold(
       backgroundColor: Color(0xFFEFF5F9),
       body: SafeArea(
@@ -63,21 +62,19 @@ class _MeLibraryState extends State<MeLibrary> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xFF03BFB5),
-                            shape: BoxShape.circle,
-                          ),
+                              border: Border.all(
+                                  color: Color(0xFF03BFB5), width: 2),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(50))),
                           child: Center(
-                              child: Text(
-                            "Me",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Color(0xFF03BFB5),
                             ),
-                          )),
+                          ),
                         ),
                         FaIcon(
                           FontAwesomeIcons.ellipsisH,
@@ -149,14 +146,14 @@ class _MeLibraryState extends State<MeLibrary> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          reminders[index][0],
+                          reminders[index]["name"],
                           style: AppTheme.reminderTextTitle,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          reminders[index][1],
+                          reminders[index]["intro"],
                           style: AppTheme.reminderText,
                         ),
                         SizedBox(
@@ -177,12 +174,11 @@ class _MeLibraryState extends State<MeLibrary> {
                                         style: AppTheme.reminderText,
                                         children: [
                                           new TextSpan(
-                                            text: meReminders
-                                                .getReminders[index][2],
+                                            text: reminders[index]["title"],
                                           ),
+                                          new TextSpan(text: "\n"),
                                           new TextSpan(
-                                            text: meReminders
-                                                .getReminders[index][3],
+                                            text: reminders[index]["background"],
                                           ),
                                         ]),
                                   ),
@@ -194,7 +190,7 @@ class _MeLibraryState extends State<MeLibrary> {
                                   width: MediaQuery.of(context).size.width *
                                       0.8,
                                   child: Text(
-                                    meReminders.getReminders[index][4],
+                                    reminders[index]["source"],
                                     style: AppTheme.reminderItalicText,
                                     textAlign: TextAlign.left,
                                   ),
@@ -345,19 +341,33 @@ class _MeLibraryState extends State<MeLibrary> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Center(
-                child: GestureDetector(
-                  child: Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.square,
+                            color: Colors.black,
+                            size: 20.0,
+                          ),
+                          Text("Co-pilot")
+                        ],
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Column(
                         children: [
                           FaIcon(
                             FontAwesomeIcons.user,
-                            color: Colors.black,
+                            color: Color(0xFF03BFB5),
                             size: 20.0,
                           ),
                           Text(
@@ -367,7 +377,7 @@ class _MeLibraryState extends State<MeLibrary> {
                         ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             )

@@ -49,21 +49,19 @@ class LatestCheckIn extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xFF03BFB5),
-                            shape: BoxShape.circle,
-                          ),
+                              border: Border.all(
+                                  color: Color(0xFF03BFB5), width: 2),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(50))),
                           child: Center(
-                              child: Text(
-                                "Me",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              )),
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Color(0xFF03BFB5),
+                            ),
+                          ),
                         ),
                         FaIcon(
                           FontAwesomeIcons.ellipsisH,
@@ -96,7 +94,7 @@ class LatestCheckIn extends StatelessWidget {
                 color: Color(0xFF03BFB5),
                 radius: Radius.circular(12),
                 child: Container(
-                  height: 90,
+                  height: 100,
                   width: MediaQuery.of(context).size.width * 0.85,
                   decoration: BoxDecoration(
                     color: Colors.transparent,

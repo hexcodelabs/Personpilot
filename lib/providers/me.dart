@@ -132,38 +132,42 @@ class MeStateOfMind with ChangeNotifier {
 }
 
 class MeReminders with ChangeNotifier {
-  List<List<String>> _reminders = [
-    [
-      "Drink fluids",
-      "Not getting enough fluids can cause headaches, loss of focus, loss of energy, crankiness,dull skin etc.",
-      "WATER/FLUIDS!",
-      "\nAn adequate daily fluid intake is: \n- About 15.5 cups (3.7 liters) of \nfluids a day for men.\n"
-          "- About 11.5 cups (2.7 liters) of \nfluids a day for women.",
-      "The U.S National Academies of \nSciences, Engineering, and Medicine",
-      "Are you drinking enough fluids while \nat work?",
-      "Great! Would you like me to give \nyou reminders during your work day\n"
-          "to make sure you get enough fluids?",
-      "Okay, let me help you with that. I \ncan give you some reminders \nduring the cource of your workday \n"
-          "to help you remember to drink \nenough fluids."
-    ],
-    [
-      "Breathe",
-      "Bunc id tincidunt duis faucibus urma adipiscing. Id lorem diam egestas vel facilisis fames.",
-      "Test",
-      "\nTest",
-      "Test",
-      "Test",
-      "Test",
-      "Test",
-    ]
-  ];
+
+//  List<Map<String,String>> _reminders = [
+//    {
+//      "name":"Drink fluids",
+//      "intro":"Not getting enough fluids can cause headaches, loss of focus, loss of energy, crankiness,dull skin etc.",
+//      "title":"WATER/FLUIDS!",
+//      "background":"\nAn adequate daily fluid intake is: \n- About 15.5 cups (3.7 liters) of \nfluids a day for men.\n"
+//          "- About 11.5 cups (2.7 liters) of \nfluids a day for women.",
+//      "source":"The U.S National Academies of \nSciences, Engineering, and Medicine",
+//      "q1":"Are you drinking enough fluids while \nat work?",
+//      "q2":"Great! Would you like me to give \nyou reminders during your work day\n"
+//          "to make sure you get enough fluids?",
+//      "q3":"Okay, let me help you with that. I \ncan give you some reminders \nduring the cource of your workday \n"
+//          "to help you remember to drink \nenough fluids."
+//},
+//    {
+//      "name":"Breathe",
+//      "intro":"Everyday functions of the body like digesting your food, moving your muscles or even just thinking, \nneed oxygen.",
+//      "title":"Breathe!!",
+//      "background":" ",
+//      "source":"British Lung Foundation",
+//      "q1":"Do you remember to pause and breathe deeply a couple a times during your work day?",
+//      "q2":"Good to know! Would you like me to give you reminders during your work day to make sure \nyou continue to remember to pause once in a while and breathe \ndeeply?",
+//      "q3":"Okay. I can help you to pause and take some deep breaths a couple of times a day. \nHow about that?",
+//    }
+//  ];
+  List<Map<String,dynamic>> _reminders;
+
+
   List _activeReminders = [];
   DateTime _startTime = DateTime.parse("2021-01-01 09:00:00");
   DateTime _endTime = DateTime.parse("2021-01-01 22:00:00");
   int _noOfReminders = 5;
   Map _activeRemindersDetails = new Map();
 
-  List<List<String>> get getReminders => _reminders;
+  List get getReminders => _reminders;
 
   List get getActiveReminders => _activeReminders;
   DateTime get getStartTime => _startTime;
@@ -171,6 +175,10 @@ class MeReminders with ChangeNotifier {
   int get getNoOfReminders => _noOfReminders;
   Map get getActiveRemindersDetails => _activeRemindersDetails;
 
+  set setReminders(var data){
+    _reminders = data;
+    notifyListeners();
+  }
   set setActiveReminders(int value) {
     _activeReminders.add(value);
     _activeReminders = _activeReminders.toSet().toList();

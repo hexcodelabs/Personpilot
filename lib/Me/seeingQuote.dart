@@ -45,21 +45,19 @@ class MeSeeingQuote extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xFF03BFB5),
-                            shape: BoxShape.circle,
-                          ),
+                              border: Border.all(
+                                  color: Color(0xFF03BFB5), width: 2),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(50))),
                           child: Center(
-                              child: Text(
-                            "Me",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Color(0xFF03BFB5),
                             ),
-                          )),
+                          ),
                         ),
                         FaIcon(
                           FontAwesomeIcons.ellipsisH,
@@ -119,19 +117,33 @@ class MeSeeingQuote extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Center(
-                child: GestureDetector(
-                  child: Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.square,
+                            color: Colors.black,
+                            size: 20.0,
+                          ),
+                          Text("Co-pilot")
+                        ],
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Column(
                         children: [
                           FaIcon(
                             FontAwesomeIcons.user,
-                            color: Colors.black,
+                            color: Color(0xFF03BFB5),
                             size: 20.0,
                           ),
                           Text(
@@ -141,7 +153,7 @@ class MeSeeingQuote extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             )

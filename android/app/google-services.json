@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "130556785739",
+    "project_id": "personpilot-281ac",
+    "storage_bucket": "personpilot-281ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130556785739:android:03c2f6b06e7611014e89ce",
+        "android_client_info": {
+          "package_name": "com.example.aiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130556785739-bagnc28sd0aiqahfqrovisd9gff2je2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN5PpLenXGU2mE8l7iR4ZXdBEEK2ZYmjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130556785739-bagnc28sd0aiqahfqrovisd9gff2je2h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

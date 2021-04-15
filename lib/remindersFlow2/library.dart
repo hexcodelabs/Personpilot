@@ -32,7 +32,7 @@ class _ReminderLibraryState extends State<ReminderLibrary> {
 
     var meReminders = Provider.of<MeReminders>(context);
 
-    List<List<String>> reminders = meReminders.getReminders;
+    List<Map<String,dynamic>> reminders = meReminders.getReminders;
 
     return Scaffold(
       backgroundColor: Color(0xFFEFF5F9),
@@ -115,22 +115,57 @@ class _ReminderLibraryState extends State<ReminderLibrary> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          reminders[index][0],
+                          reminders[index]["name"],
                           style: AppTheme.reminderTextTitle,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          reminders[index][1],
+                          reminders[index]["intro"],
                           style: AppTheme.reminderText,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         showMoreStatus[index] == true
-                            ? Text(meReminders.getReminders[index][2],
-                            style: AppTheme.reminderText)
+                            ? Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width *
+                                  0.8,
+                              child: RichText(
+                                textAlign: TextAlign.left,
+                                text: TextSpan(
+                                    style: AppTheme.reminderText,
+                                    children: [
+                                      new TextSpan(
+                                        text: reminders[index]["title"],
+                                      ),
+                                      new TextSpan(text: "\n"),
+                                      new TextSpan(
+                                        text: reminders[index]["background"],
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width *
+                                  0.8,
+                              child: Text(
+                                reminders[index]["source"],
+                                style: AppTheme.reminderItalicText,
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                          ],
+                        )
                             : Text(""),
                         GestureDetector(
                           onTap: () => {

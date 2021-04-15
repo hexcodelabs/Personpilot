@@ -6,10 +6,17 @@ import 'package:aiapp/introduction/quote.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/registration.dart';
 
-class IntroductionWelcomePage extends StatelessWidget {
+class IntroductionWelcomePage extends StatefulWidget {
+  @override
+  _IntroductionWelcomePageState createState() =>
+      _IntroductionWelcomePageState();
+}
+
+class _IntroductionWelcomePageState extends State<IntroductionWelcomePage> {
   @override
   Widget build(BuildContext context) {
     var registration = Provider.of<Registration>(context);
+
     String name = registration.getName;
     String text =
         "Let me introduce myself \nproperly. I am Personpilot - your\n new personal co-pilot."
@@ -72,7 +79,8 @@ class IntroductionWelcomePage extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.black.withOpacity(0.75),
                       fontSize: 19,
-                      fontWeight: FontWeight.w400,),
+                      fontWeight: FontWeight.w400,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   Spacer(),
@@ -84,13 +92,12 @@ class IntroductionWelcomePage extends StatelessWidget {
                         height: 50,
                         onPressed: () => {
                           Navigator.pushAndRemoveUntil(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: IntroductionQuotePage(),
-                            ),
-                                  (route)=>false
-                          )
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: IntroductionQuotePage(),
+                              ),
+                              (route) => false)
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),

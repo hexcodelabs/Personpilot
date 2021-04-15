@@ -23,12 +23,12 @@ class _RatingPageState extends State<RatingPage> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Color(0xFFEFF5F9),
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
         ),
         elevation: 0,
-        centerTitle:true,
         title: Text(
           "Personpilot",
           style: AppTheme.headingText,
@@ -193,32 +193,48 @@ class _RatingPageState extends State<RatingPage> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0,20,0,0),
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: ()=>{
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Overview()))
-                        },
-                        child: Container(
-                          color: Colors.white,
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    child: Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: Column(
                               children: [
                                 FaIcon(
-                                  FontAwesomeIcons.user,
-                                  color: Colors.black,
+                                  FontAwesomeIcons.square,
+                                  color: Color(0xFF03BFB5),
                                   size: 20.0,
                                 ),
-                                Text("Me")
+                                Text("Co-pilot",style: TextStyle(color: Color(0xFF03BFB5)),)
                               ],
                             ),
                           ),
-                        ),
+                          GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Overview()))
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Column(
+                                children: [
+                                  FaIcon(
+                                    FontAwesomeIcons.user,
+                                    color: Colors.black,
+                                    size: 20.0,
+                                  ),
+                                  Text("Me")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )

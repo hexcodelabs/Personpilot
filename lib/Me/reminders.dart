@@ -9,6 +9,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:aiapp/Me/library.dart';
 import 'package:aiapp/providers/registration.dart';
 
+
 class MeRemindersPage extends StatefulWidget {
   @override
   _MeRemindersPageState createState() => _MeRemindersPageState();
@@ -24,8 +25,9 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
     showMoreStatus = List.filled(meReminders.getReminders.length, false);
   }
 
-  Widget reminderContainer(context, List<String> reminder, int index) {
+  Widget reminderContainer(context, int index) {
     var meReminders = Provider.of<MeReminders>(context, listen: false);
+    List<Map<String,dynamic>> reminders = meReminders.getReminders;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Container(
@@ -41,7 +43,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    reminder[0],
+                    reminders[index]["name"],
                     style: AppTheme.reminderTextTitle,
                   ),
                   PopupMenuButton<String>(
@@ -98,7 +100,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                 height: 10,
               ),
               Text(
-                reminder[1],
+                reminders[index]["intro"],
                 style: AppTheme.reminderText,
               ),
               SizedBox(
@@ -119,12 +121,11 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                           style: AppTheme.reminderText,
                           children: [
                             new TextSpan(
-                              text: meReminders
-                                  .getReminders[index][2],
+                              text: reminders[index]["title"],
                             ),
+                            new TextSpan(text: "\n"),
                             new TextSpan(
-                              text: meReminders
-                                  .getReminders[index][3],
+                              text: reminders[index]["background"],
                             ),
                           ]),
                     ),
@@ -136,7 +137,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                     width: MediaQuery.of(context).size.width *
                         0.8,
                     child: Text(
-                      meReminders.getReminders[index][4],
+                      reminders[index]["source"],
                       style: AppTheme.reminderItalicText,
                       textAlign: TextAlign.left,
                     ),
@@ -205,21 +206,19 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xFF03BFB5),
-                            shape: BoxShape.circle,
-                          ),
+                              border: Border.all(
+                                  color: Color(0xFF03BFB5), width: 2),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(50))),
                           child: Center(
-                              child: Text(
-                            "Me",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Color(0xFF03BFB5),
                             ),
-                          )),
+                          ),
                         ),
                         FaIcon(
                           FontAwesomeIcons.ellipsisH,
@@ -252,7 +251,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                 color: Color(0xFF03BFB5),
                 radius: Radius.circular(12),
                 child: Container(
-                  height: 90,
+                  height: 100,
                   width: MediaQuery.of(context).size.width * 0.85,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
@@ -299,7 +298,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
               height: 10,
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.45,
+              height: MediaQuery.of(context).size.height * 0.4,
               width: MediaQuery.of(context).size.width * 0.9,
               child: ListView.builder(
                   physics: BouncingScrollPhysics(),
@@ -310,29 +309,48 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                   itemBuilder: (BuildContext context, int index) {
                     int idx = meReminders.getActiveReminders.elementAt(index);
                     return reminderContainer(
-                        context, meReminders.getReminders[idx], idx);
+                        context, idx);
                   }),
             ),
             Spacer(),
-            Center(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Container(
                 color: Colors.white,
                 width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Column(
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.user,
-                        color: Colors.black,
-                        size: 20.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.square,
+                            color: Colors.black,
+                            size: 20.0,
+                          ),
+                          Text("Co-pilot")
+                        ],
                       ),
-                      Text(
-                        "Me",
-                        style: TextStyle(color: Color(0xFF03BFB5)),
-                      )
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.user,
+                            color: Color(0xFF03BFB5),
+                            size: 20.0,
+                          ),
+                          Text(
+                            "Me",
+                            style: TextStyle(color: Color(0xFF03BFB5)),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )

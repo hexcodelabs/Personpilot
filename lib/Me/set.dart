@@ -19,7 +19,7 @@ class MeSetPage extends StatefulWidget {
 }
 
 class _MeSetPageState extends State<MeSetPage> {
-  var newFormat = DateFormat("h:mm a");
+  var newFormat = DateFormat("h:mma");
   DateTime rangeStartTime = DateTime.parse("2021-01-01 00:00:00");
   DateTime rangeEndTime = DateTime.parse("2021-01-01 23:59:00");
 
@@ -66,21 +66,19 @@ class _MeSetPageState extends State<MeSetPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 40,
-                          width: 40,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: Color(0xFF03BFB5),
-                            shape: BoxShape.circle,
-                          ),
+                              border: Border.all(
+                                  color: Color(0xFF03BFB5), width: 2),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(50))),
                           child: Center(
-                              child: Text(
-                            "Me",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.normal,
+                            child: FaIcon(
+                              FontAwesomeIcons.user,
+                              color: Color(0xFF03BFB5),
                             ),
-                          )),
+                          ),
                         ),
                         FaIcon(
                           FontAwesomeIcons.ellipsisH,
@@ -228,6 +226,7 @@ class _MeSetPageState extends State<MeSetPage> {
                             Column(
                               children: [
                                 Text(
+
                                   newFormat.format(endTime),
                                   style: TextStyle(
                                       fontSize: 18,
@@ -246,6 +245,7 @@ class _MeSetPageState extends State<MeSetPage> {
                         SfRangeSlider(
                             min: rangeStartTime,
                             max: rangeEndTime,
+                            dateIntervalType: DateIntervalType.minutes,
                             values: SfRangeValues(startTime, endTime),
                             activeColor: Colors.white,
                             inactiveColor: Colors.grey,
@@ -319,19 +319,33 @@ class _MeSetPageState extends State<MeSetPage> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-              child: Center(
-                child: GestureDetector(
-                  child: Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width,
-                    child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Container(
+                color: Colors.white,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.square,
+                            color: Colors.black,
+                            size: 20.0,
+                          ),
+                          Text("Co-pilot")
+                        ],
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                       child: Column(
                         children: [
                           FaIcon(
                             FontAwesomeIcons.user,
-                            color: Colors.black,
+                            color: Color(0xFF03BFB5),
                             size: 20.0,
                           ),
                           Text(
@@ -341,7 +355,7 @@ class _MeSetPageState extends State<MeSetPage> {
                         ],
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             )

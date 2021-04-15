@@ -110,7 +110,7 @@ class _EmotionsPageState extends State<EmotionsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: 50,
+                    height: MediaQuery.of(context).size.height*0.06,
                   ),
                   Text(
                     "What emotions resonate with you",
@@ -131,7 +131,7 @@ class _EmotionsPageState extends State<EmotionsPage> {
                     height: 10,
                   ),
                   Container(
-                      height: MediaQuery.of(context).size.height * 0.42,
+                      height: MediaQuery.of(context).size.height * 0.44,
                       child: emotionButtons(stateOfMind.getEmotions, context)),
                   Spacer(),
                   Row(
@@ -187,31 +187,47 @@ class _EmotionsPageState extends State<EmotionsPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Overview()))
-                        },
-                        child: Container(
-                          color: Colors.white,
-                          width: MediaQuery.of(context).size.width,
-                          child: Padding(
+                    child: Container(
+                      color: Colors.white,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Padding(
                             padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                             child: Column(
                               children: [
                                 FaIcon(
-                                  FontAwesomeIcons.user,
-                                  color: Colors.black,
+                                  FontAwesomeIcons.square,
+                                  color: Color(0xFF03BFB5),
                                   size: 20.0,
                                 ),
-                                Text("Me")
+                                Text("Co-pilot",style: TextStyle(color: Color(0xFF03BFB5)),)
                               ],
                             ),
                           ),
-                        ),
+                          GestureDetector(
+                            onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Overview()))
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                              child: Column(
+                                children: [
+                                  FaIcon(
+                                    FontAwesomeIcons.user,
+                                    color: Colors.black,
+                                    size: 20.0,
+                                  ),
+                                  Text("Me")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   )
