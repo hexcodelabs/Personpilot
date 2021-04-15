@@ -96,19 +96,37 @@ class _RegPageTwoState extends State<RegPageTwo> {
                             ),
                           ),
                           SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.2,
+                            height: MediaQuery.of(context).size.height * 0.1,
                           ),
                           MaterialButton(
                             minWidth: MediaQuery.of(context).size.width * 0.85,
                             height: 50,
-                            onPressed: () => {},
+                            onPressed: () async {
+                            await registration.signUpWithGoogle();
+                            if(registration.getIsRegistered){
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: RegPageThree(),
+                                ),
+                              );
+                            }else{
+                              if(registration.getIsError){
+                                error.validationAlert(context,
+                                    "Error in registration");
+                              }
+                            }
+
+                            },
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                                 side: BorderSide(
                                     color: Color(0xFF2867B2), width: 2)),
                             color: Color(0xFF2867B2),
                             child: Text(
-                              "Create account with LinkedIn",
+                              "Create account with Google",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -263,7 +281,6 @@ class _RegPageTwoState extends State<RegPageTwo> {
                                         return null;
                                       }
                                       await registration.signUpWithEmail();
-                                      print("registered");
                                     }
                                     if(registration.getIsRegistered){
                                       Navigator.pop(context);

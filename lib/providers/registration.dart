@@ -78,10 +78,27 @@ class Registration with ChangeNotifier {
         _isLoading = false;
         _isError = false;
         _isRegistered = true;
-        print(_name);
       }
     });
 
+    notifyListeners();
+  }
+
+  Future<void> signUpWithGoogle() async{
+    _isLoading = true;
+    notifyListeners();
+    await fbFunctions.signUpWithGoogle().then((message) async{
+      if(message=="Error"){
+        _isError = true;
+        _isLoading = false;
+        _isRegistered = false;
+      }else{
+        _userId = message;
+        _isLoading = false;
+        _isError = false;
+        _isRegistered = true;
+      }
+    });
     notifyListeners();
   }
 
