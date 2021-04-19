@@ -9,6 +9,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:aiapp/Me/library.dart';
 import 'package:aiapp/providers/registration.dart';
 
+import 'updateReminder.dart';
 
 class MeRemindersPage extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
 
   Widget reminderContainer(context, int index) {
     var meReminders = Provider.of<MeReminders>(context, listen: false);
-    List<Map<String,dynamic>> reminders = meReminders.getReminders;
+    List<Map<String, dynamic>> reminders = meReminders.getReminders;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       child: Container(
@@ -52,14 +53,27 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                       color: Colors.black,
                       size: 20.0,
                     ),
-                    onSelected: (value)=>{
-                      if(value=="Delete reminder"){
-                        meReminders.setRemoveReminder = index,
-                        meReminders.removeReminderDetails = index,
-                      }
+                    onSelected: (value) async => {
+                      if (value == "Delete reminder")
+                        {
+                          meReminders.setRemoveReminder = index,
+                          meReminders.removeReminderDetails = index,
+                          await meReminders.removeReminder(index)
+                        }
+                      else if (value == "Edit reminder")
+                        {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: MeUpdateSetPage(index: index,),
+                            ),
+                          ),
+                        }
                     },
                     itemBuilder: (BuildContext context) {
-                      return {'Edit reminder', 'Delete reminder'}.map((String choice) {
+                      return {'Edit reminder', 'Delete reminder'}
+                          .map((String choice) {
                         return PopupMenuItem<String>(
                           value: choice,
                           child: Text(choice, style: AppTheme.reminderText),
@@ -108,42 +122,40 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
               ),
               showMoreStatus[index] == true
                   ? Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width *
-                        0.8,
-                    child: RichText(
-                      textAlign: TextAlign.left,
-                      text: TextSpan(
-                          style: AppTheme.reminderText,
-                          children: [
-                            new TextSpan(
-                              text: reminders[index]["title"],
-                            ),
-                            new TextSpan(text: "\n"),
-                            new TextSpan(
-                              text: reminders[index]["background"],
-                            ),
-                          ]),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width *
-                        0.8,
-                    child: Text(
-                      reminders[index]["source"],
-                      style: AppTheme.reminderItalicText,
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              )
+                      children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: RichText(
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                                style: AppTheme.reminderText,
+                                children: [
+                                  new TextSpan(
+                                    text: reminders[index]["title"],
+                                  ),
+                                  new TextSpan(text: "\n"),
+                                  new TextSpan(
+                                    text: reminders[index]["background"],
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Text(
+                            reminders[index]["source"],
+                            style: AppTheme.reminderItalicText,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ],
+                    )
                   : Text(""),
               GestureDetector(
                 onTap: () => {
@@ -212,7 +224,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                               border: Border.all(
                                   color: Color(0xFF03BFB5), width: 2),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50))),
+                                  BorderRadius.all(Radius.circular(50))),
                           child: Center(
                             child: FaIcon(
                               FontAwesomeIcons.user,
@@ -308,8 +320,7 @@ class _MeRemindersPageState extends State<MeRemindersPage> {
                       : meReminders.getActiveReminders.length,
                   itemBuilder: (BuildContext context, int index) {
                     int idx = meReminders.getActiveReminders.elementAt(index);
-                    return reminderContainer(
-                        context, idx);
+                    return reminderContainer(context, idx);
                   }),
             ),
             Spacer(),

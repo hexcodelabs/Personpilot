@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:aiapp/firebase-functions/auth.dart';
 import 'package:aiapp/providers/me.dart';
+import 'package:aiapp/providers/stateOfMind.dart';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +22,22 @@ class _IntroductionQuotePageState extends State<IntroductionQuotePage> {
 
   @override
   void initState() {
+    
     fetchData(context);
+
+    //fetching all data
+    var stateOfMind = Provider.of<StateOfMind>(context, listen: false);
+    stateOfMind.getStateOfMindData();
+
+    var meQuote = Provider.of<MeQuotes>(context, listen: false);
+    meQuote.fetchQuotes();
+
+    var meStateOfMind = Provider.of<MeStateOfMind>(context, listen: false);
+    meStateOfMind.getStateOfMindData();
+
+    var meReminders = Provider.of<MeReminders>(context, listen: false);
+    meReminders.fetchReminders();
+
     super.initState();
   }
 
@@ -146,14 +162,14 @@ class _IntroductionQuotePageState extends State<IntroductionQuotePage> {
                               MaterialButton(
                                 minWidth: 200,
                                 height: 50,
-                                onPressed: () => {
+                                onPressed: () {
                                   Navigator.pushAndRemoveUntil(
                                       context,
                                       PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         child: RatingPage(),
                                       ),
-                                      (route) => false)
+                                      (route) => false);
                                 },
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),

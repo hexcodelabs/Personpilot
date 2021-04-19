@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:aiapp/firebase-functions/auth.dart';
+import 'package:aiapp/firebase-functions/database.dart';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,15 +12,15 @@ import 'package:aiapp/providers/registration.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class MeSetPage extends StatefulWidget {
+class MeUpdateSetPage extends StatefulWidget {
   final index;
-  MeSetPage({Key key, @required this.index}) : super(key: key);
+  MeUpdateSetPage({Key key, @required this.index}) : super(key: key);
 
   @override
-  _MeSetPageState createState() => _MeSetPageState();
+  _MeUpdateSetPageState createState() => _MeUpdateSetPageState();
 }
 
-class _MeSetPageState extends State<MeSetPage> {
+class _MeUpdateSetPageState extends State<MeUpdateSetPage> {
   var newFormat = DateFormat("h:mma");
   DateTime rangeStartTime = DateTime.parse("2021-01-01 00:00:00");
   DateTime rangeEndTime = DateTime.parse("2021-01-01 23:59:00");
@@ -26,6 +28,30 @@ class _MeSetPageState extends State<MeSetPage> {
   DateTime startTime = DateTime.parse("2021-01-01 09:00:00");
   DateTime endTime = DateTime.parse("2021-01-01 22:00:00");
   int noOfReminders = 5;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReminders();
+  }
+
+  Future<void> fetchReminders() async {
+    Database database = new Database();
+    FireBaseFunctions _auth = new FireBaseFunctions();
+    var userId = await _auth.getUserID();
+    var data = await database.fetchReminders(userId);
+    for (var ind in data) {
+      if (ind["index"] == widget.index) {
+        setState(() {
+          noOfReminders = ind["noOfReminders"];
+          startTime = DateTime.parse(ind["startTime"].toDate().toString());
+          endTime = DateTime.parse(ind["endTime"].toDate().toString());
+          print(startTime);
+          print(endTime);
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +74,7 @@ class _MeSetPageState extends State<MeSetPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () => {
-                        meReminders.setRemoveReminder = widget.index,
-                        Navigator.pop(context)
-                      },
+                      onTap: () => {Navigator.pop(context)},
                       child: FaIcon(
                         FontAwesomeIcons.arrowLeft,
                         color: Colors.black,
@@ -72,7 +95,7 @@ class _MeSetPageState extends State<MeSetPage> {
                               border: Border.all(
                                   color: Color(0xFF03BFB5), width: 2),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50))),
+                                  BorderRadius.all(Radius.circular(50))),
                           child: Center(
                             child: FaIcon(
                               FontAwesomeIcons.user,
@@ -226,7 +249,6 @@ class _MeSetPageState extends State<MeSetPage> {
                             Column(
                               children: [
                                 Text(
-
                                   newFormat.format(endTime),
                                   style: TextStyle(
                                       fontSize: 18,
@@ -269,7 +291,6 @@ class _MeSetPageState extends State<MeSetPage> {
                   minWidth: 150,
                   height: 50,
                   onPressed: () => {
-                    meReminders.setRemoveReminder = widget.index,
                     for (int i = 0; i < 1; i++) {Navigator.pop(context)}
                   },
                   shape: RoundedRectangleBorder(
@@ -290,8 +311,10 @@ class _MeSetPageState extends State<MeSetPage> {
                       startTime,
                       endTime
                     ];
-                    await meReminders.addMeReminderData();
-                    for (int i = 0; i < 2; i++) {Navigator.pop(context);}
+                    await meReminders.updateReminderData(widget.index);
+                    for (int i = 0; i < 2; i++) {
+                      Navigator.pop(context);
+                    }
                     Navigator.push(
                       context,
                       PageTransition(

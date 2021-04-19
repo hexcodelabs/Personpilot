@@ -230,7 +230,7 @@ class Overview extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          "Reflexion",
+                          "Reflection",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,

@@ -14,6 +14,7 @@ class RatingPage extends StatefulWidget {
 }
 
 class _RatingPageState extends State<RatingPage> {
+
   @override
   Widget build(BuildContext context) {
     var stateOfMind = Provider.of<StateOfMind>(context);

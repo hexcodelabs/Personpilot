@@ -201,18 +201,19 @@ class _MeEmotionsPageState extends State<MeEmotionsPage> {
                 MaterialButton(
                   minWidth: 150,
                   height: 50,
-                  onPressed: () => {
+                  onPressed: () async {
                     setState((){
                       me.setEmotionIsSelected = isEmotionSelected;
-                    }),
-                    for (var i = 0; i < 3; i++) {Navigator.pop(context)},
+                    });
+                    await me.addStateOfMindData();
+                    for (var i = 0; i < 3; i++) {Navigator.pop(context);}
                     Navigator.push(
                         context,
                         PageTransition(
                           type: PageTransitionType.rightToLeft,
                           child: MeSomDonePage(),
                         ),
-                    )
+                    );
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),

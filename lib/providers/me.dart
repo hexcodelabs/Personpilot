@@ -1,7 +1,8 @@
+import 'package:aiapp/firebase-functions/auth.dart';
+import 'package:aiapp/firebase-functions/database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class MeStateOfMind with ChangeNotifier {
   double _value = 3;
@@ -9,6 +10,9 @@ class MeStateOfMind with ChangeNotifier {
   String _feel = "Okay";
   List<bool> _isReasonSelected = List.filled(16, false);
   List<bool> _isEmotionSelected = List.filled(50, false);
+  Database database = new Database();
+  FireBaseFunctions _auth = new FireBaseFunctions();
+
   List<String> _reasons = [
     "Appreciation/Recognition",
     "Colleagues",
@@ -100,16 +104,60 @@ class MeStateOfMind with ChangeNotifier {
 
   set setFeel(String feel) {
     _feel = feel;
+    print("Feel " + _feel);
     notifyListeners();
   }
 
   set setReasonIsSelected(List<bool> values) {
     _isReasonSelected = values;
+    print(_isReasonSelected);
     notifyListeners();
   }
 
   set setEmotionIsSelected(List<bool> values) {
     _isEmotionSelected = values;
+    print(_isEmotionSelected);
+    notifyListeners();
+  }
+
+  Future<void> addStateOfMindData() async {
+    var userId = await _auth.getUserID();
+    var userName = await _auth.fetchName();
+    var userData = {
+      "name": userName,
+      "feel": _feel,
+      "reasons": _isReasonSelected,
+      "emotions": _isEmotionSelected,
+      "lastCheckIn": DateTime.now()
+    };
+    await database.addStateOfMind(userId, userData);
+  }
+
+  Future<void> getStateOfMindData() async {
+    Database database = new Database();
+    FireBaseFunctions _auth = new FireBaseFunctions();
+    var userId = await _auth.getUserID();
+    var data = await database.fetchStateOfMind(userId);
+    if (data != null) {
+      _feel = data["feel"];
+      if (_feel == "Terrible") {
+        _ratingIcon = FontAwesomeIcons.angry;
+      } else if (_feel == "Bad") {
+        _ratingIcon = FontAwesomeIcons.meh;
+      } else if (_feel == "Okay") {
+        _ratingIcon = FontAwesomeIcons.smile;
+      } else if (_feel == "Good") {
+        _ratingIcon = FontAwesomeIcons.grinAlt;
+      } else {
+        _ratingIcon = FontAwesomeIcons.laughBeam;
+      }
+      for (int i = 0; i < _isReasonSelected.length; i++) {
+        _isReasonSelected[i] = data["reasons"][i];
+      }
+      for (int i = 0; i < _isEmotionSelected.length; i++) {
+        _isEmotionSelected[i] = data["emotions"][i];
+      }
+    }
     notifyListeners();
   }
 
@@ -132,7 +180,6 @@ class MeStateOfMind with ChangeNotifier {
 }
 
 class MeReminders with ChangeNotifier {
-
 //  List<Map<String,String>> _reminders = [
 //    {
 //      "name":"Drink fluids",
@@ -158,14 +205,14 @@ class MeReminders with ChangeNotifier {
 //      "q3":"Okay. I can help you to pause and take some deep breaths a couple of times a day. \nHow about that?",
 //    }
 //  ];
-  List<Map<String,dynamic>> _reminders;
-
+  List<Map<String, dynamic>> _reminders;
 
   List _activeReminders = [];
   DateTime _startTime = DateTime.parse("2021-01-01 09:00:00");
   DateTime _endTime = DateTime.parse("2021-01-01 22:00:00");
   int _noOfReminders = 5;
   Map _activeRemindersDetails = new Map();
+  List<dynamic> detailsReminders;
 
   List get getReminders => _reminders;
 
@@ -175,18 +222,25 @@ class MeReminders with ChangeNotifier {
   int get getNoOfReminders => _noOfReminders;
   Map get getActiveRemindersDetails => _activeRemindersDetails;
 
-  set setReminders(var data){
+  Database database = new Database();
+  FireBaseFunctions _auth = new FireBaseFunctions();
+
+  set setReminders(var data) {
     _reminders = data;
+    print(_reminders);
     notifyListeners();
   }
+
   set setActiveReminders(int value) {
     _activeReminders.add(value);
     _activeReminders = _activeReminders.toSet().toList();
+    print(_activeReminders);
     notifyListeners();
   }
 
   set setStartTime(DateTime val) {
     _startTime = val;
+    print(_startTime);
     notifyListeners();
   }
 
@@ -224,8 +278,50 @@ class MeReminders with ChangeNotifier {
 
   set setActiveRemindersDetails(var details) {
     //0 -> index   1 -> noOfReminders  2 -> startTime  3 -> endTime
+    detailsReminders = details;
     _activeRemindersDetails[details[0]] = [details[1], details[2], details[3]];
     print(_activeRemindersDetails);
+    notifyListeners();
+  }
+
+  Future<void> removeReminder(index) async {
+    print(index);
+    var userId = await _auth.getUserID();
+    await database.deleteReminder(userId, index);
+  }
+
+  Future<void> addMeReminderData() async {
+    var userId = await _auth.getUserID();
+    var data = {
+      "noOfReminders": detailsReminders[1],
+      "startTime": detailsReminders[2],
+      "endTime": detailsReminders[3],
+      "index": detailsReminders[0],
+    };
+    await database.addReminderData(userId, detailsReminders[0], data);
+  }
+
+  Future<void> updateReminderData(index) async{
+    var userId = await _auth.getUserID();
+    var data = {
+      "noOfReminders": detailsReminders[1],
+      "startTime": detailsReminders[2],
+      "endTime": detailsReminders[3],
+      "index": index,
+    };
+    await database.updateReminderData(userId, index , data);
+  }
+
+  Future<void> fetchReminders() async {
+    Database database = new Database();
+    FireBaseFunctions _auth = new FireBaseFunctions();
+    var userId = await _auth.getUserID();
+    var data = await database.fetchReminders(userId);
+    for (var ind in data) {
+      _activeReminders.add(ind["index"]);
+      _activeReminders = _activeReminders.toSet().toList();
+      print(ind);
+    }
     notifyListeners();
   }
 }
@@ -245,17 +341,30 @@ class MeAdvices extends ChangeNotifier {
 
 class MeQuotes extends ChangeNotifier {
   List<List<String>> _quotes = [
-    [
-      "Do not be embarrased by your \nfailures, learn from them and start \nagain.",
-      "Richard Branson",
-      "https://www.jing.fm/clipimg/full/177-1776545_avatars-richard-branson-cartoon-png.png"
-    ],
-    [
-      "Concentrate all your thoughts upon \nthe work in hand. The sun's rays do \nnot burn until brought to a focus.",
-      "Alexander Graham Bell",
-      "https://freepikpsd.com/wp-content/uploads/2019/10/alexander-graham-bell-clipart-6-Free-PNG-Images-Transparent.png"
-    ]
+    // [
+    //   "Do not be embarrased by your \nfailures, learn from them and start \nagain.",
+    //   "Richard Branson",
+    //   "https://www.jing.fm/clipimg/full/177-1776545_avatars-richard-branson-cartoon-png.png"
+    // ],
+    // [
+    //   "Concentrate all your thoughts upon \nthe work in hand. The sun's rays do \nnot burn until brought to a focus.",
+    //   "Alexander Graham Bell",
+    //   "https://freepikpsd.com/wp-content/uploads/2019/10/alexander-graham-bell-clipart-6-Free-PNG-Images-Transparent.png"
+    // ]
   ];
 
+  Future<void> fetchQuotes() async {
+      Database database = new Database();
+      FireBaseFunctions _auth = new FireBaseFunctions();
+      var userId = await _auth.getUserID();
+      var data = await database.fetchQuotes(userId);
+      for (var ind in data) {
+        _quotes.add([ind["quote"],ind["name"],ind["image"]]);
+      }
+      notifyListeners();
+    }
+
   List<List<String>> get getQuotes => _quotes;
+
+
 }

@@ -1,3 +1,5 @@
+import 'package:aiapp/firebase-functions/auth.dart';
+import 'package:aiapp/firebase-functions/database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -111,6 +113,54 @@ class StateOfMind with ChangeNotifier {
     _isEmotionSelected = values; // value[0] ==> position  value[1] ==> value
     notifyListeners();
   }
+  Database database = new Database();
+  FireBaseFunctions _auth = new FireBaseFunctions(); 
+
+  Future<void> updateStateOfMindData() async {
+    var userId = await _auth.getUserID();
+    var userName = await _auth.fetchName();
+    var userData = {
+      "name": userName,
+      "feel":_feel,
+      "reasons":_isReasonSelected,
+      "emotions": _isEmotionSelected,
+      "lastCheckIn": DateTime.now()
+    };
+    await database.updateStateOfMind(userId, userData);
+  }
+
+  Future<void> getStateOfMindData() async {
+    Database database = new Database();
+    FireBaseFunctions _auth = new FireBaseFunctions();
+    var userId = await _auth.getUserID();
+    var data = await database.fetchStateOfMind(userId);
+    if (data != null) {
+      _feel  = data["feel"];
+      if(_feel=="Terrible"){
+        _ratingIcon = FontAwesomeIcons.angry;
+      }
+      else if(_feel=="Bad"){
+        _ratingIcon = FontAwesomeIcons.meh;
+      }
+      else if(_feel=="Okay"){
+        _ratingIcon = FontAwesomeIcons.smile;
+      }
+      else if(_feel=="Good"){
+        _ratingIcon = FontAwesomeIcons.grinAlt;
+      }
+      else{
+        _ratingIcon = FontAwesomeIcons.laughBeam;
+      }
+      for(int i=0;i<_isReasonSelected.length;i++){
+        _isReasonSelected[i] = data["reasons"][i];
+      }
+      for(int i=0;i<_isEmotionSelected.length;i++){
+        _isEmotionSelected[i] = data["emotions"][i];
+      }
+    }
+    notifyListeners();
+  }
+  
   set setReasonsToDefault(int value){
     _isReasonSelected = List.filled(15, false);
     notifyListeners();

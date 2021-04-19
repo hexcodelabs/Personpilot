@@ -162,8 +162,9 @@ class _EmotionsPageState extends State<EmotionsPage> {
                       MaterialButton(
                         minWidth: 150,
                         height: 50,
-                        onPressed: () => {
-                          stateOfMind.setEmotionIsSelected = isEmotionSelected,
+                        onPressed: () async {
+                          stateOfMind.setEmotionIsSelected = isEmotionSelected;
+                          await stateOfMind.updateStateOfMindData();
                           Navigator.pushAndRemoveUntil(
                             context,
                             PageTransition(
@@ -171,7 +172,7 @@ class _EmotionsPageState extends State<EmotionsPage> {
                               child: DonePage(),
                             ),
                                   (route)=>false
-                          )
+                          );
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),

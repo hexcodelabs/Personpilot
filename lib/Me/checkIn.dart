@@ -25,7 +25,6 @@ class _CheckInState extends State<CheckIn> {
       feel = me.getFeel;
       ratingIcon = me.getRatingIcon;
     });
-
     super.initState();
   }
   @override
@@ -155,9 +154,10 @@ class _CheckInState extends State<CheckIn> {
                             activeColor: Colors.white,
                             inactiveColor: Colors.grey,
                             onChanged: (double value) {
-                              print(value);
+                              // print(value);
                               setState(() {
                                 ratingValue= value;
+                                me.setFeel  = feel;
                               });
 
                               if (ratingValue >= 1.0 &&
@@ -204,13 +204,7 @@ class _CheckInState extends State<CheckIn> {
                   minWidth: 150,
                   height: 50,
                   onPressed: () => {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: MeReasonsPage(),
-                      ),
-                    )
+                    Navigator.of(context).pop()
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),

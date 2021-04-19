@@ -6,9 +6,14 @@ import 'package:provider/provider.dart';
 import 'package:aiapp/providers/registration.dart';
 import 'package:aiapp/providers/me.dart';
 
-class MeSeeingQuote extends StatelessWidget {
-  final index = 0;
+class MeSeeingQuote extends StatefulWidget {
+  @override
+  _MeSeeingQuoteState createState() => _MeSeeingQuoteState();
+}
 
+class _MeSeeingQuoteState extends State<MeSeeingQuote> {
+  final index = 1;
+  
   @override
   Widget build(BuildContext context) {
     var registration = Provider.of<Registration>(context);

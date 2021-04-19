@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:aiapp/firebase-functions/auth.dart';
+import 'package:aiapp/firebase-functions/database.dart';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,10 +11,42 @@ import 'package:page_transition/page_transition.dart';
 import 'package:aiapp/Me/checkIn.dart';
 import 'package:aiapp/providers/registration.dart';
 
-class LatestCheckIn extends StatelessWidget {
+class LatestCheckIn extends StatefulWidget {
+  @override
+  _LatestCheckInState createState() => _LatestCheckInState();
+}
+
+class _LatestCheckInState extends State<LatestCheckIn> {
   String date = "01";
+
   String month = "01";
-  String year = "2021";
+
+  String year = "2000";
+
+  @override
+  void initState() {
+    super.initState();
+    getLastCheckInDate();
+    var me = Provider.of<MeStateOfMind>(context, listen: false);
+    me.getStateOfMindData();
+  }
+
+  Future<void> getLastCheckInDate() async {
+    Database database = new Database();
+    FireBaseFunctions _auth = new FireBaseFunctions();
+    var userId = await _auth.getUserID();
+    var data = await database.fetchStateOfMind(userId);
+    if (data != null) {
+      print(data["lastCheckIn"]);
+      var _date = data["lastCheckIn"].toDate();
+      setState(() {
+        date = _date.year.toString();
+        month = _date.month.toString();
+        year = _date.day.toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var me = Provider.of<MeStateOfMind>(context);
@@ -32,9 +66,7 @@ class LatestCheckIn extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: ()=>{
-                        Navigator.pop(context)
-                      },
+                      onTap: () => {Navigator.pop(context)},
                       child: FaIcon(
                         FontAwesomeIcons.arrowLeft,
                         color: Colors.black,
@@ -55,7 +87,7 @@ class LatestCheckIn extends StatelessWidget {
                               border: Border.all(
                                   color: Color(0xFF03BFB5), width: 2),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50))),
+                                  BorderRadius.all(Radius.circular(50))),
                           child: Center(
                             child: FaIcon(
                               FontAwesomeIcons.user,
@@ -150,74 +182,76 @@ class LatestCheckIn extends StatelessWidget {
             ),
             Container(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                          child: FaIcon(
-                            me.getRatingIcon,
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      child: FaIcon(
+                    me.getRatingIcon,
+                    color: Colors.black,
+                    size: 90.0,
+                  )),
+                  Container(
+                    height: 30,
+                    width: 150,
+                    child: Center(
+                      child: Text(
+                        me.getFeel,
+                        style: TextStyle(
+                            fontSize: 20,
                             color: Colors.black,
-                            size: 90.0,
-                          )),
-                      Container(
-                        height: 30,
-                        width: 150,
-                        child: Center(
-                          child: Text(
-                            me.getFeel,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                            fontWeight: FontWeight.bold),
                       ),
-                    ],
+                    ),
                   ),
-                )),
+                ],
+              ),
+            )),
             Spacer(),
             Center(
-              child: Text("Reasons for mood",style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black.withOpacity(0.5)
-              ),),
+              child: Text(
+                "Reasons for mood",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black.withOpacity(0.5)),
+              ),
             ),
             Container(
-              height: 50.0,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-                  itemCount: me.getReasonsIsSelected.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if(me.getReasonsIsSelected[index] == true){
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(5,0,5,0),
-                        child: Container(
-                          height: 40,
-                          width: 100,
-                          child: Center(
-                            child: Text(me.getReasons[index], style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black.withOpacity(0.5)
-                            ),),
+                height: 50.0,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                    itemCount: me.getReasonsIsSelected.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (me.getReasonsIsSelected[index] == true) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            child: Center(
+                              child: Text(
+                                me.getReasons[index],
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black.withOpacity(0.5)),
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    }else{
-                      return(
-                      Container()
-                      );
-                    }
-                  }
-              )
-            ),
+                        );
+                      } else {
+                        return (Container());
+                      }
+                    })),
             Center(
-              child: Text("Resonating emotions",style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black.withOpacity(0.5)
-              ),),
+              child: Text(
+                "Resonating emotions",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black.withOpacity(0.5)),
+              ),
             ),
             Container(
                 height: 50.0,
@@ -226,34 +260,32 @@ class LatestCheckIn extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
                     itemCount: me.getEmotions.length,
                     itemBuilder: (BuildContext context, int index) {
-                      if(me.getEmotionsIsSelected[index] == true){
+                      if (me.getEmotionsIsSelected[index] == true) {
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                           child: Container(
                             height: 40,
                             width: 100,
                             child: Center(
-                              child: Text(me.getEmotions[index], style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black.withOpacity(0.5)
-                              ),),
+                              child: Text(
+                                me.getEmotions[index],
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black.withOpacity(0.5)),
+                              ),
                             ),
                           ),
                         );
-                      }else{
-                        return(
-                            Container()
-                        );
+                      } else {
+                        return (Container());
                       }
-                    }
-                )
-            ),
+                    })),
             Center(
               child: Container(
                 color: Colors.white,
                 width: MediaQuery.of(context).size.width,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0,10,0,10),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Column(
                     children: [
                       FaIcon(
@@ -261,15 +293,15 @@ class LatestCheckIn extends StatelessWidget {
                         color: Colors.black,
                         size: 20.0,
                       ),
-                      Text("Me",style: TextStyle(
-                          color: Color(0xFF03BFB5)
-                      ),)
+                      Text(
+                        "Me",
+                        style: TextStyle(color: Color(0xFF03BFB5)),
+                      )
                     ],
                   ),
                 ),
               ),
             )
-
           ],
         ),
       ),

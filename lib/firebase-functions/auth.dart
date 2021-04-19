@@ -122,4 +122,10 @@ class FireBaseFunctions {
       return 0;
     }
   }
+
+  Future getUserID() async{
+    var user = _auth.currentUser;
+    return user.uid;
+  }
+  
 }
