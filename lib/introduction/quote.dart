@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:aiapp/firebase-functions/auth.dart';
+import 'package:aiapp/firebase-functions/database.dart';
 import 'package:aiapp/providers/me.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:aiapp/themes/theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,9 +40,38 @@ class _IntroductionQuotePageState extends State<IntroductionQuotePage> {
 
     var meReminders = Provider.of<MeReminders>(context, listen: false);
     meReminders.fetchReminders();
+    
+    requestPermission();
+    saveDeviceID();
 
     super.initState();
   }
+  
+  Future requestPermission() async{
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    if (Platform.isIOS) {
+      NotificationSettings settings = await _fcm.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+      print('User granted permission: ${settings.authorizationStatus}');
+    }
+  }
+  Future saveDeviceID() async{
+      Database database = new Database();
+      var isSavedDeviceID = await database.saveDeviceToken();
+      if(isSavedDeviceID){
+        print("Succesfully saved device id");
+      }
+      else{
+        print("Error saving device id");
+      }
+    }
 
   void fetchData(context) async {
     var registration = Provider.of<Registration>(context, listen: false);
@@ -47,7 +79,7 @@ class _IntroductionQuotePageState extends State<IntroductionQuotePage> {
     setState(() {
       isLoading = true;
     });
-    print("start");
+    print("Starting fetching reminder data");
     name = await fbFunctions.fetchName();
     me.setReminders = await fbFunctions.fetchReminders();
     await fbFunctions.fetchReminders();

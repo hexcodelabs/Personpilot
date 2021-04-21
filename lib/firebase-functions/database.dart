@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class Database {
   addUserDetails(String userId, userData) async {
@@ -125,5 +129,32 @@ class Database {
       });
     });
     return _data;
+  }
+
+// Get the token, save it to the database for current user
+  Future saveDeviceToken() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging.instance;
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    var user = _auth.currentUser;
+    var uid =  user.uid;
+    
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = FirebaseFirestore.instance
+          .collection('DeviceID')
+          .doc(uid);
+
+      await tokens.set({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+      return true;
+    }
+    return false;
   }
 }

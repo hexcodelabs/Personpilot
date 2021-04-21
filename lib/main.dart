@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:aiapp/firebase-functions/database.dart';
 import 'package:aiapp/introduction/quote.dart';
 import 'package:aiapp/providers/me.dart';
 import 'package:aiapp/providers/registration.dart';
@@ -10,6 +13,7 @@ import 'package:aiapp/providers/stateOfMind.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:aiapp/firebase-functions/auth.dart';
 import 'package:aiapp/introduction/welcome.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,13 +23,24 @@ void main() async {
   await fbFunctions.isSignedIn().then((value) => {runApp(MyApp(value))});
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final int isSignedIn;
   MyApp(this.isSignedIn);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+      super.initState();
+      
+  } 
+
   @override
   Widget build(BuildContext context) {
-
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -51,7 +66,7 @@ class MyApp extends StatelessWidget {
         title: 'AI App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'OpenSans'),
-        home: isSignedIn == 2
+        home: widget.isSignedIn == 2
             ? IntroductionQuotePage()
             : RegPageOne(),
       ),
