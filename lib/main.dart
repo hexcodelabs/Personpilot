@@ -16,9 +16,16 @@ import 'package:aiapp/firebase-functions/auth.dart';
 import 'package:aiapp/introduction/welcome.dart';
 import 'package:flutter/material.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  print("Handling a background message: ${message.messageId}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FireBaseFunctions fbFunctions = new FireBaseFunctions();
   Provider.debugCheckInvalidValueType = null;
   await fbFunctions.isSignedIn().then((value) => {runApp(MyApp(value))});
@@ -42,8 +49,7 @@ class _MyAppState extends State<MyApp> {
   Future listenToNotifications() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
+      print('Message data: ${message}');
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
       }
