@@ -41,13 +41,14 @@ class _IntroductionQuotePageState extends State<IntroductionQuotePage> {
     var meReminders = Provider.of<MeReminders>(context, listen: false);
     meReminders.fetchReminders();
     
-    requestPermission();
+    //for notifications
+    requestPermissionNotifications();
     saveDeviceID();
 
     super.initState();
   }
   
-  Future requestPermission() async{
+  Future requestPermissionNotifications() async{
     final FirebaseMessaging _fcm = FirebaseMessaging.instance;
     if (Platform.isIOS) {
       NotificationSettings settings = await _fcm.requestPermission(

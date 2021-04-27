@@ -5,6 +5,7 @@ import 'package:aiapp/introduction/quote.dart';
 import 'package:aiapp/providers/me.dart';
 import 'package:aiapp/providers/registration.dart';
 import 'package:aiapp/registration/regPageOne.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,12 +33,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
-      super.initState();
-      
-  } 
+    super.initState();
+    listenToNotifications();
+  }
+
+  Future listenToNotifications() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,9 +77,7 @@ class _MyAppState extends State<MyApp> {
         title: 'AI App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'OpenSans'),
-        home: widget.isSignedIn == 2
-            ? IntroductionQuotePage()
-            : RegPageOne(),
+        home: widget.isSignedIn == 2 ? IntroductionQuotePage() : RegPageOne(),
       ),
     );
   }
