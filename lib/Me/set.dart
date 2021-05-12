@@ -20,6 +20,10 @@ class MeSetPage extends StatefulWidget {
 
 class _MeSetPageState extends State<MeSetPage> {
   var newFormat = DateFormat("h:mma");
+  String todayYear = DateTime.now().year.toString();
+  String todayMonth = DateTime.now().month.toString();
+  String todayDay = DateTime.now().day.toString();
+
   DateTime rangeStartTime = DateTime.parse("2021-01-01 00:00:00");
   DateTime rangeEndTime = DateTime.parse("2021-01-01 23:59:00");
 
@@ -28,10 +32,26 @@ class _MeSetPageState extends State<MeSetPage> {
   int noOfReminders = 5;
 
   @override
+  void initState() {
+    super.initState();
+    if(todayMonth.length==1){
+      todayMonth = "0"+todayMonth;
+    }
+    if(todayDay.length==1){
+      todayDay = "0"+todayDay;
+    }
+    rangeStartTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 00:00:00");
+    rangeEndTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 23:59:00");
+
+    startTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 09:00:00");
+    endTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 22:00:00");
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     var meReminders = Provider.of<MeReminders>(context);
     var registration = Provider.of<Registration>(context);
-
     String name = registration.getName;
     String reminderName = meReminders.getReminders[widget.index]["name"];
     return Scaffold(
@@ -72,7 +92,7 @@ class _MeSetPageState extends State<MeSetPage> {
                               border: Border.all(
                                   color: Color(0xFF03BFB5), width: 2),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50))),
+                                  BorderRadius.all(Radius.circular(50))),
                           child: Center(
                             child: FaIcon(
                               FontAwesomeIcons.user,
@@ -226,7 +246,6 @@ class _MeSetPageState extends State<MeSetPage> {
                             Column(
                               children: [
                                 Text(
-
                                   newFormat.format(endTime),
                                   style: TextStyle(
                                       fontSize: 18,
@@ -291,7 +310,9 @@ class _MeSetPageState extends State<MeSetPage> {
                       endTime
                     ];
                     await meReminders.addMeReminderData();
-                    for (int i = 0; i < 2; i++) {Navigator.pop(context);}
+                    for (int i = 0; i < 2; i++) {
+                      Navigator.pop(context);
+                    }
                     Navigator.push(
                       context,
                       PageTransition(
