@@ -21,7 +21,11 @@ class MeUpdateSetPage extends StatefulWidget {
 }
 
 class _MeUpdateSetPageState extends State<MeUpdateSetPage> {
-  var newFormat = DateFormat("h:mma");
+  var newFormat = DateFormat("h:mma"); 
+  String todayYear = DateTime.now().year.toString();
+  String todayMonth = DateTime.now().month.toString();
+  String todayDay = DateTime.now().day.toString();
+
   DateTime rangeStartTime = DateTime.parse("2021-01-01 00:00:00");
   DateTime rangeEndTime = DateTime.parse("2021-01-01 23:59:00");
 
@@ -33,6 +37,17 @@ class _MeUpdateSetPageState extends State<MeUpdateSetPage> {
   void initState() {
     super.initState();
     fetchReminders();
+    if(todayMonth.length==1){
+      todayMonth = "0"+todayMonth;
+    }
+    if(todayDay.length==1){
+      todayDay = "0"+todayDay;
+    }
+    rangeStartTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 00:00:00");
+    rangeEndTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 23:59:00");
+
+    startTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 09:00:00");
+    endTime = DateTime.parse(todayYear+"-"+todayMonth+"-"+todayDay+" 22:00:00");
   }
 
   Future<void> fetchReminders() async {
