@@ -280,25 +280,44 @@ class _LatestCheckInState extends State<LatestCheckIn> {
                         return (Container());
                       }
                     })),
-            Center(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: Container(
                 color: Colors.white,
                 width: MediaQuery.of(context).size.width,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Column(
-                    children: [
-                      FaIcon(
-                        FontAwesomeIcons.user,
-                        color: Colors.black,
-                        size: 20.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.square,
+                            color: Colors.black,
+                            size: 20.0,
+                          ),
+                          Text("Co-pilot")
+                        ],
                       ),
-                      Text(
-                        "Me",
-                        style: TextStyle(color: Color(0xFF03BFB5)),
-                      )
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Column(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.user,
+                            color: Color(0xFF03BFB5),
+                            size: 20.0,
+                          ),
+                          Text(
+                            "Me",
+                            style: TextStyle(color: Color(0xFF03BFB5)),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             )

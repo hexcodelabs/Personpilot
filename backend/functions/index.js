@@ -10,7 +10,7 @@ const fs = admin.firestore();
 exports.randomNotification = functions.pubsub
   .schedule("* * * * *")
   .onRun(async () => {
-    const activeReminder = false; // to active notification, testing purpose
+    const activeReminder = true; // to active notification, testing purpose
 
     const query_a = await admin.firestore().collection("DeviceID").get();
 

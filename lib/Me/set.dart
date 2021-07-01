@@ -125,13 +125,14 @@ class _MeSetPageState extends State<MeSetPage> {
             SizedBox(
               height: 50,
             ),
+
             Container(
               width: MediaQuery.of(context).size.width,
               child: Stack(
                 children: [
                   ColorFiltered(
                     colorFilter: ColorFilter.mode(
-                        Color(0xFF42466C).withOpacity(0.8), BlendMode.srcATop),
+                        Color(0xFF03BFB5).withOpacity(0.8), BlendMode.srcATop),
                     child: AspectRatio(
                       aspectRatio: 16 / 9,
                       child: Image.asset(
