@@ -39,6 +39,7 @@ exports.randomNotification = functions.pubsub
         notification: { title: title, body: body },
         token: notificationToken,
         data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
+        content_available : true,
       };
 
       await admin
@@ -98,6 +99,7 @@ exports.sendNotification = functions.pubsub
         notification: { title: title, body: body },
         token: notificationToken,
         data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
+        content_available : true,
       };
 
       await admin

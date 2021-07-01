@@ -8,6 +8,7 @@ import 'package:aiapp/registration/regPageOne.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 
@@ -39,19 +40,23 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    listenToNotifications();
+    if(widget.isSignedIn == 2){
+      listenToNotifications();
+    }
   }
 
   Future listenToNotifications() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
-      print('Message data: ${message}');
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+      RemoteNotification notification = message.notification;
+      if (notification != null) {
+        print('Title: ${notification.title}');
+        print('Body: ${notification.body}');
       }
     });
   }
