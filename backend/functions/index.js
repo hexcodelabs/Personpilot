@@ -10,7 +10,7 @@ const fs = admin.firestore();
 exports.randomNotification = functions.pubsub
   .schedule("* * * * *")
   .onRun(async () => {
-    const activeReminder = true; // to active notification, testing purpose
+    const activeReminder = false; // to active notification, testing purpose
 
     const query_a = await admin.firestore().collection("DeviceID").get();
 
@@ -39,7 +39,6 @@ exports.randomNotification = functions.pubsub
         notification: { title: title, body: body },
         token: notificationToken,
         data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
-        content_available : true,
       };
 
       await admin
@@ -99,7 +98,6 @@ exports.sendNotification = functions.pubsub
         notification: { title: title, body: body },
         token: notificationToken,
         data: { click_action: "FLUTTER_NOTIFICATION_CLICK" },
-        content_available : true,
       };
 
       await admin

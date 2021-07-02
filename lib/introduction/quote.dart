@@ -56,8 +56,8 @@ class _IntroductionQuotePageState extends State<IntroductionQuotePage> {
         announcement: false,
         badge: true,
         carPlay: false,
-        criticalAlert: false,
-        provisional: false,
+        criticalAlert: true,
+        provisional: true,
         sound: true,
       );
       print('User granted permission: ${settings.authorizationStatus}');

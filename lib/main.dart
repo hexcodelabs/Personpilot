@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aiapp/Me/reminders.dart';
 import 'package:aiapp/firebase-functions/database.dart';
 import 'package:aiapp/introduction/quote.dart';
 import 'package:aiapp/providers/me.dart';
@@ -8,7 +9,9 @@ import 'package:aiapp/registration/regPageOne.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:aiapp/providers/stateOfMind.dart';
 
@@ -23,10 +26,30 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  'This channel is used for important notifications.', // description
+  importance: Importance.high,
+);
+
+/// Initialize the [FlutterLocalNotificationsPlugin] package.
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   FireBaseFunctions fbFunctions = new FireBaseFunctions();
   Provider.debugCheckInvalidValueType = null;
   await fbFunctions.isSignedIn().then((value) => {runApp(MyApp(value))});
@@ -40,12 +63,11 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    if(widget.isSignedIn == 2){
+    if (widget.isSignedIn == 2) {
       listenToNotifications();
     }
   }
@@ -57,7 +79,26 @@ class _MyAppState extends State<MyApp> {
       if (notification != null) {
         print('Title: ${notification.title}');
         print('Body: ${notification.body}');
+        // flutterLocalNotificationsPlugin.show(
+        //     notification.hashCode,
+        //     notification.title,
+        //     notification.body,
+        //     NotificationDetails(
+        //       android: AndroidNotificationDetails(
+        //         channel.id,
+        //         channel.name,
+        //         channel.description,
+        //         icon: 'launch_background',
+        //       ),
+        //     ));
       }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      Timer.run(() {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MeRemindersPage()));
+      });
     });
   }
 
